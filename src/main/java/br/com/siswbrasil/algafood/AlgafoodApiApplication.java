@@ -30,15 +30,15 @@ public class AlgafoodApiApplication {
 		novo = repository.salvar(novo);
 
 		System.out.println("Restaurante adicionado : " + novo);
-		
+
 		Restaurante atualizar = new Restaurante();
 		atualizar.setId(1L);
 		atualizar.setNome("Bob's");
 		atualizar.setTaxaFrete(new BigDecimal(5.5));
 		atualizar = repository.salvar(atualizar);
-		
+
 		System.out.println("Restaurante alterado: " + atualizar);
-		
+
 		Restaurante remover = new Restaurante();
 		remover.setId(2L);
 		repository.remover(remover);
@@ -46,7 +46,9 @@ public class AlgafoodApiApplication {
 		List<Restaurante> listar = repository.listar();
 
 		for (Restaurante restaurante : listar) {
-			System.out.println(restaurante);
+			System.out.printf("%s - %f - %s\n", restaurante.getNome(), restaurante.getTaxaFrete(),
+					restaurante.getCozinha() != null ? restaurante.getCozinha().getNome() : "");
+
 		}
 	}
 
