@@ -32,10 +32,13 @@ public class RestauranteService {
 	public Restaurante atualizar(Long id, Restaurante restaurante) {
 		Restaurante restauranteSalvo = this.restauranteRepository.buscar(id);
 
-		Long cozinhaId = restaurante.getCozinha().getId();
-		Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
-		if (cozinha == null) {
-			throw new EntidadeNaoEncontradaException("A cozinha " + cozinhaId + " não foi encontrada !");
+		Cozinha cozinha = null;
+		if (restaurante.getCozinha() != null) {
+			Long cozinhaId = restaurante.getCozinha().getId();
+			cozinha = cozinhaRepository.buscar(cozinhaId);
+			if (cozinha == null) {
+				throw new EntidadeNaoEncontradaException("A cozinha " + cozinhaId + " não foi encontrada !");
+			}
 		}
 
 		restauranteSalvo.setCozinha(cozinha);
