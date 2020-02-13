@@ -1,6 +1,9 @@
 package br.com.siswbrasil.algafood.domain.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import br.com.siswbrasil.algafood.domain.exception.EntidadeNaoEncontradaException;
@@ -19,50 +22,45 @@ public class CidadeService {
 	private EstadoRepository estadoRepository;
 
 	public Cidade salvar(Cidade obj) {
-		
-		
 
 		Long estadoId = obj.getEstado().getId();
 
-		if (estadoRepository.buscar(estadoId) == null) {
+		if (estadoRepository.findById(estadoId) == null) {
 			throw new EntidadeRelacionadaNaoEncontradaException(
 					String.format("Estado código %s relacionado com a Cidade não existe!", estadoId));
 		}
 
-		return cidadeRepository.salvar(obj);
+		return cidadeRepository.save(obj);
 	}
 
 	public Cidade atualizar(Long id, Cidade obj) {
 
 		Long estadoId = obj.getEstado() != null ? obj.getEstado().getId() : null;
 
-		if (( estadoId != null ) && (estadoRepository.buscar(estadoId) == null)) {
+		if ((estadoId != null) && (estadoRepository.findById(estadoId) == null)) {
 			throw new EntidadeRelacionadaNaoEncontradaException(
 					String.format("Estado código %s relacionado com a Cidade não existe!", estadoId));
 		}
 
-		Cidade cidade = cidadeRepository.buscar(id);
+		Optional<Cidade> cidade = cidadeRepository.findById(id);
 
-		if (cidade == null) {
+		if (cidade.isEmpty()) {
 			throw new EntidadeNaoEncontradaException(String.format("Cidade código %s não foi encontrado", id));
 		}
 
-		cidade.setEstado(obj.getEstado());
-		cidade.setNome(obj.getNome());
+		cidade.get().setEstado(obj.getEstado());
+		cidade.get().setNome(obj.getNome());
 
-		return cidadeRepository.salvar(cidade);
+		return cidadeRepository.save(cidade.get());
 	}
 
 	public void excluir(Long id) {
 
-		Cidade cidade = cidadeRepository.buscar(id);
-
-		if (cidade == null) {
+		try {
+			cidadeRepository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
 			throw new EntidadeNaoEncontradaException(String.format("Cidade código %s não foi encontrado", id));
 		}
-
-		cidadeRepository.remover(id);
-
 	}
 
 }

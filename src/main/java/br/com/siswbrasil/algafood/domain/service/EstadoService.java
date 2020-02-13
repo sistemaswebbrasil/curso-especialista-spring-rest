@@ -1,14 +1,14 @@
 package br.com.siswbrasil.algafood.domain.service;
 
-import javax.validation.ConstraintViolationException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import br.com.siswbrasil.algafood.domain.exception.EntidadeEmUsoException;
 import br.com.siswbrasil.algafood.domain.exception.EntidadeNaoEncontradaException;
-import br.com.siswbrasil.algafood.domain.exception.EntidadeRelacionadaNaoEncontradaException;
 import br.com.siswbrasil.algafood.domain.model.Estado;
 import br.com.siswbrasil.algafood.domain.repository.EstadoRepository;
 
@@ -20,36 +20,34 @@ public class EstadoService {
 
 	public Estado salvar(Estado obj) {
 
-		return estadoRepository.salvar(obj);
+		return estadoRepository.save(obj);
 	}
 
 	public Estado atualizar(Long id, Estado obj) {
 
-		Estado estado = estadoRepository.buscar(id);
+		Optional<Estado> estado = estadoRepository.findById(id);
 
-		if (estado == null) {
+		if (estado.isEmpty()) {
 			throw new EntidadeNaoEncontradaException(String.format("Estado código %s não foi encontrado", id));
 		}
 
-		estado.setNome(obj.getNome());
+		estado.get().setNome(obj.getNome());
 
-		return estadoRepository.salvar(estado);
+		return estadoRepository.save(estado.get());
 	}
-
+	
 	public void excluir(Long id) {
-
-		Estado estado = estadoRepository.buscar(id);
-
-		if (estado == null) {
-			throw new EntidadeNaoEncontradaException(String.format("Estado código %s não foi encontrado", id));
-		}
-
 		try {
-			estadoRepository.remover(id);
-		} catch (DataIntegrityViolationException e) {
-			throw new EntidadeEmUsoException("Não é possivel excluir etado , pois está em uso");
-		}
+			estadoRepository.deleteById(id);
 
-	}
+		} catch (EmptyResultDataAccessException e) {
+			throw new EntidadeNaoEncontradaException(
+					String.format("Não existe um cadastro de estado com código %d", id));
+
+		} catch (DataIntegrityViolationException e) {
+			throw new EntidadeEmUsoException(
+					String.format("Estado de código %d não pode ser removida, pois está em uso", id));
+		}
+	}	
 
 }
