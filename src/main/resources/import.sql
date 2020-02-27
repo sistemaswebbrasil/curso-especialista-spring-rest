@@ -49,5 +49,11 @@ insert into grupo (nome) VALUES ('admin');
 
 insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2);
 
+insert into usuario (data_cadastro, email, nome, senha) values (utc_timestamp(), 'adriano.faria@gmail.com', 'Adriano Faria Alves', '123');
+insert into usuario (data_cadastro, email, nome, senha) values (utc_timestamp(), 'micheletalves@gmail.com', 'Michele Cristina', '456');
+
+insert into grupo_usuario (usuario_id, grupo_id) values (1, 1), (1, 2);
+
+
 
 
