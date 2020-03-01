@@ -3,12 +3,10 @@ package br.com.siswbrasil.algafood.api.controller;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +16,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.siswbrasil.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.siswbrasil.algafood.domain.model.Restaurante;
 import br.com.siswbrasil.algafood.domain.repository.RestauranteRepository;
 import br.com.siswbrasil.algafood.domain.service.RestauranteService;
@@ -39,64 +37,49 @@ public class RestauranteController {
 
 	@GetMapping
 	public List<Restaurante> listar() {
+
 		return restauranteRepository.findAll();
+
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Restaurante> buscar(@PathVariable Long id) {
-		Optional<Restaurante> restaurante = restauranteRepository.findById(id);
+	public Restaurante buscar(@PathVariable Long id) {
 
-		if (restaurante.isPresent()) {
-			return ResponseEntity.ok(restaurante.get());
-		}
+		return restauranteService.buscarOuFalhar(id);
 
-		return ResponseEntity.notFound().build();
 	}
 
 	@PostMapping
-	public ResponseEntity<?> adicionar(@RequestBody Restaurante restaurante) {
-		try {
-			restaurante = restauranteService.salvar(restaurante);
+	@ResponseStatus(code = HttpStatus.CREATED)
+	public Restaurante adicionar(@RequestBody Restaurante restaurante) {
 
-			return ResponseEntity.status(HttpStatus.CREATED).body(restaurante);
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+		return restauranteService.salvar(restaurante);
+
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
-		try {
-			Optional<Restaurante> restauranteAtual = restauranteRepository.findById(id);
+	public Restaurante atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
 
-			if (restauranteAtual.isPresent()) {
-				BeanUtils.copyProperties(restaurante, restauranteAtual.get(), "id", "formasPagamento","endereco","dataCadastro");
+		Restaurante restauranteAtual = restauranteService.buscarOuFalhar(id);
 
-				Restaurante restauranteSalvo = restauranteService.salvar(restauranteAtual.get());
-				return ResponseEntity.ok(restauranteSalvo);
-			}
+		BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro");
 
-			return ResponseEntity.notFound().build();
+		return restauranteService.salvar(restauranteAtual);
 
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<?> atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
-		Optional<Restaurante> restauranteAtual = restauranteRepository.findById(id);
+	public Restaurante atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
 
-		if (restauranteAtual.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
+		Restaurante restauranteAtual = restauranteService.buscarOuFalhar(id);
 
-		merge(campos, restauranteAtual.get());
+		merge(campos, restauranteAtual);
 
-		return atualizar(id, restauranteAtual.get());
+		return atualizar(id, restauranteAtual);
 	}
 
 	private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino) {
+
 		ObjectMapper objectMapper = new ObjectMapper();
 		Restaurante restauranteOrigem = objectMapper.convertValue(dadosOrigem, Restaurante.class);
 
@@ -110,14 +93,9 @@ public class RestauranteController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> remover(@PathVariable Long id) {
-		try {
-			restauranteService.excluir(id);
-			return ResponseEntity.noContent().build();
-
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.notFound().build();
-		}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void remover(@PathVariable Long id) {
+		restauranteService.excluir(id);
 	}
 
 }
