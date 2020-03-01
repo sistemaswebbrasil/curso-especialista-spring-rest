@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.siswbrasil.algafood.domain.exception.EntidadeNaoEncontradaException;
+import br.com.siswbrasil.algafood.domain.exception.NegocioException;
 import br.com.siswbrasil.algafood.domain.model.Restaurante;
 import br.com.siswbrasil.algafood.domain.repository.RestauranteRepository;
 import br.com.siswbrasil.algafood.domain.service.RestauranteService;
@@ -53,7 +55,11 @@ public class RestauranteController {
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public Restaurante adicionar(@RequestBody Restaurante restaurante) {
 
-		return restauranteService.salvar(restaurante);
+		try {
+			return restauranteService.salvar(restaurante);
+		} catch (EntidadeNaoEncontradaException e) {
+			throw new NegocioException(e.getMessage());
+		}
 
 	}
 
@@ -64,7 +70,11 @@ public class RestauranteController {
 
 		BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro");
 
-		return restauranteService.salvar(restauranteAtual);
+		try {
+			return restauranteService.salvar(restauranteAtual);
+		} catch (EntidadeNaoEncontradaException e) {
+			throw new NegocioException(e.getMessage());
+		}
 
 	}
 
