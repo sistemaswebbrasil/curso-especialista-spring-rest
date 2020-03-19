@@ -30,9 +30,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import br.com.siswbrasil.algafood.core.validation.Groups;
 import br.com.siswbrasil.algafood.core.validation.Multiplo;
 import br.com.siswbrasil.algafood.core.validation.TaxaFrete;
+import br.com.siswbrasil.algafood.core.validation.ValorZeroIncluiDescricao;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
