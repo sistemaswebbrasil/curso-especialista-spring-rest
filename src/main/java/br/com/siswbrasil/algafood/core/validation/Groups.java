@@ -1,4 +1,4 @@
-package br.com.siswbrasil.algafood;
+package br.com.siswbrasil.algafood.core.validation;
 
 public interface Groups {
 
