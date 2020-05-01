@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -21,19 +22,20 @@ import lombok.EqualsAndHashCode;
 @Entity
 public class Cidade {
 
-	@Id
 	@EqualsAndHashCode.Include
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
+	
 	@NotBlank
 	@Column(nullable = false)
 	private String nome;
 	
-	@NotNull
-	@ConvertGroup(from = Default.class,to = Groups.EstadoID.class)
 	@Valid
+	@ConvertGroup(from = Default.class, to = Groups.EstadoId.class)
+	@NotNull
 	@ManyToOne
+	@JoinColumn(nullable = false)
 	private Estado estado;
 
 }

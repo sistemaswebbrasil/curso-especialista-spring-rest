@@ -1,6 +1,6 @@
 package br.com.siswbrasil.algafood.domain.model;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,32 +15,35 @@ import javax.persistence.ManyToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Usuario {
 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@EqualsAndHashCode.Include
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(nullable = false)
 	private String nome;
-
+	
+	@Column(nullable = false)
 	private String email;
-
+	
+	@Column(nullable = false)
 	private String senha;
-
+	
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
-	private LocalDateTime dataCadastro;
-
+	private OffsetDateTime dataCadastro;
+	
 	@ManyToMany
-	@JoinTable(name = "grupo_usuario", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "grupo_id"))
+	@JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "usuario_id"),
+			inverseJoinColumns = @JoinColumn(name = "grupo_id"))
 	private List<Grupo> grupos = new ArrayList<>();
-
+	
 }

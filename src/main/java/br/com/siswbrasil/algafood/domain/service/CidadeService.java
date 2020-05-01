@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.siswbrasil.algafood.domain.exception.CidadeNaoEncontradaException;
 import br.com.siswbrasil.algafood.domain.exception.EntidadeEmUsoException;
-import br.com.siswbrasil.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.siswbrasil.algafood.domain.model.Cidade;
 import br.com.siswbrasil.algafood.domain.model.Estado;
 import br.com.siswbrasil.algafood.domain.repository.CidadeRepository;
