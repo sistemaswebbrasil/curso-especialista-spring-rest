@@ -1,4 +1,4 @@
-package br.com.siswbrasil.algafood.api.model;
+package br.com.siswbrasil.algafood.api.model.mixin;
 
 import java.util.List;
 
