@@ -1,5 +1,7 @@
 package br.com.siswbrasil.algafood.domain.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,9 +23,11 @@ public class EstadoService {
 		return estadoRepository.save(estado);
 	}
 
+	@Transactional
 	public void excluir(Long id) {
 		try {
 			estadoRepository.deleteById(id);
+			estadoRepository.flush();
 
 		} catch (EmptyResultDataAccessException e) {
 			throw new EstadoNaoEncontradoException(id);
