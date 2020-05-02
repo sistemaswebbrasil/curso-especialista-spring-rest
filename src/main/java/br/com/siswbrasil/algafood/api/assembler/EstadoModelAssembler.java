@@ -8,20 +8,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.siswbrasil.algafood.api.model.EstadoModel;
-import br.com.siswbrasil.algafood.domain.model.FormaPagamanto;
+import br.com.siswbrasil.algafood.domain.model.Estado;
 
 @Component
 public class EstadoModelAssembler {
 
 	@Autowired
 	private ModelMapper modelMapper;
-
-	public EstadoModel toModel(FormaPagamanto estado) {
+	
+	public EstadoModel toModel(Estado estado) {
 		return modelMapper.map(estado, EstadoModel.class);
 	}
-
-	public List<EstadoModel> toCollectionModel(List<FormaPagamanto> estados) {
-		return estados.stream().map(estado -> toModel(estado)).collect(Collectors.toList());
+	
+	public List<EstadoModel> toCollectionModel(List<Estado> estados) {
+		return estados.stream()
+				.map(estado -> toModel(estado))
+				.collect(Collectors.toList());
 	}
-
+	
 }

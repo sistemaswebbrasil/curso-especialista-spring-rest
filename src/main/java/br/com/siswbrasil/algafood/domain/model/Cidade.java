@@ -36,6 +36,6 @@ public class Cidade {
 	@NotNull
 	@ManyToOne
 	@JoinColumn(nullable = false)
-	private FormaPagamanto estado;
+	private Estado estado;
 
 }

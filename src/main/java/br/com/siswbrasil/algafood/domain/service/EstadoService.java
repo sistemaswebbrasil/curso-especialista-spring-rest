@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.siswbrasil.algafood.domain.exception.EntidadeEmUsoException;
 import br.com.siswbrasil.algafood.domain.exception.EstadoNaoEncontradoException;
-import br.com.siswbrasil.algafood.domain.model.FormaPagamanto;
+import br.com.siswbrasil.algafood.domain.model.Estado;
 import br.com.siswbrasil.algafood.domain.repository.EstadoRepository;
 
 @Service
@@ -19,7 +19,7 @@ public class EstadoService {
 	@Autowired
 	private EstadoRepository estadoRepository;
 
-	public FormaPagamanto salvar(FormaPagamanto estado) {
+	public Estado salvar(Estado estado) {
 		return estadoRepository.save(estado);
 	}
 
@@ -37,7 +37,7 @@ public class EstadoService {
 		}
 	}
 
-	public FormaPagamanto buscarOuFalhar(Long id) {
+	public Estado buscarOuFalhar(Long id) {
 		return estadoRepository.findById(id)
 				.orElseThrow(() -> new EstadoNaoEncontradoException(id));
 	}

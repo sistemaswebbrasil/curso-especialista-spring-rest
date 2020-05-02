@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import br.com.siswbrasil.algafood.domain.exception.CidadeNaoEncontradaException;
 import br.com.siswbrasil.algafood.domain.exception.EntidadeEmUsoException;
 import br.com.siswbrasil.algafood.domain.model.Cidade;
-import br.com.siswbrasil.algafood.domain.model.FormaPagamanto;
+import br.com.siswbrasil.algafood.domain.model.Estado;
 import br.com.siswbrasil.algafood.domain.repository.CidadeRepository;
 
 @Service
@@ -27,7 +27,7 @@ public class CidadeService {
 	public Cidade salvar(Cidade cidade) {
 		Long estadoId = cidade.getEstado().getId();
 
-		FormaPagamanto estado = cadastroEstado.buscarOuFalhar(estadoId);
+		Estado estado = cadastroEstado.buscarOuFalhar(estadoId);
 
 		cidade.setEstado(estado);
 
