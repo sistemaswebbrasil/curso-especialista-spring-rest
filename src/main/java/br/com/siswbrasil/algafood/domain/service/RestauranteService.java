@@ -11,22 +11,26 @@ import br.com.siswbrasil.algafood.domain.exception.EntidadeEmUsoException;
 import br.com.siswbrasil.algafood.domain.exception.RestauranteNaoEncontradoException;
 import br.com.siswbrasil.algafood.domain.model.Cidade;
 import br.com.siswbrasil.algafood.domain.model.Cozinha;
+import br.com.siswbrasil.algafood.domain.model.FormaPagamento;
 import br.com.siswbrasil.algafood.domain.model.Restaurante;
 import br.com.siswbrasil.algafood.domain.repository.RestauranteRepository;
 
 @Service
 public class RestauranteService {
 
-	private static final String MSG_RESTAURANTE_EM_USO = "Restaurante de código %d não pode ser removida, pois está em uso";	
+	private static final String MSG_RESTAURANTE_EM_USO = "Restaurante de código %d não pode ser removida, pois está em uso";
 
 	@Autowired
 	private RestauranteRepository restauranteRepository;
 
 	@Autowired
 	private CozinhaService cozinhaService;
-	
+
 	@Autowired
-	private CidadeService cidadeService;	
+	private CidadeService cidadeService;
+
+	@Autowired
+	private FormaPagamentoService formaPagamentoService;
 
 	public Restaurante salvar(Restaurante restaurante) {
 		Long cozinhaId = restaurante.getCozinha().getId();
@@ -53,24 +57,39 @@ public class RestauranteService {
 			throw new EntidadeEmUsoException(String.format(MSG_RESTAURANTE_EM_USO, id));
 		}
 	}
-	
+
 	@Transactional
 	public void ativar(Long restauranteId) {
 		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
-		
+
 		restauranteAtual.ativar();
 	}
-	
+
 	@Transactional
 	public void inativar(Long restauranteId) {
 		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
-		
+
 		restauranteAtual.inativar();
-	}	
+	}
 
 	public Restaurante buscarOuFalhar(Long id) {
-		return restauranteRepository.findById(id).orElseThrow(
-				() -> new RestauranteNaoEncontradoException(id));
+		return restauranteRepository.findById(id).orElseThrow(() -> new RestauranteNaoEncontradoException(id));
+	}
+
+	@Transactional
+	public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
+
+		restaurante.removerFormaPagamento(formaPagamento);
+	}
+
+	@Transactional
+	public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
+
+		restaurante.adicionarFormaPagamento(formaPagamento);
 	}
 
 }
