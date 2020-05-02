@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Estado {
+public class FormaPagamanto {
 
 	@NotNull(groups = Groups.EstadoId.class)
 	@EqualsAndHashCode.Include

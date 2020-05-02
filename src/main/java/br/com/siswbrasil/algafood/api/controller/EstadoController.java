@@ -20,7 +20,7 @@ import br.com.siswbrasil.algafood.api.assembler.EstadoInputDisassembler;
 import br.com.siswbrasil.algafood.api.assembler.EstadoModelAssembler;
 import br.com.siswbrasil.algafood.api.model.EstadoModel;
 import br.com.siswbrasil.algafood.api.model.input.EstadoInput;
-import br.com.siswbrasil.algafood.domain.model.Estado;
+import br.com.siswbrasil.algafood.domain.model.FormaPagamanto;
 import br.com.siswbrasil.algafood.domain.repository.EstadoRepository;
 import br.com.siswbrasil.algafood.domain.service.EstadoService;
 
@@ -42,14 +42,14 @@ public class EstadoController {
 	
 	@GetMapping
 	public List<EstadoModel> listar() {
-		List<Estado> todosEstados = estadoRepository.findAll();
+		List<FormaPagamanto> todosEstados = estadoRepository.findAll();
 		
 		return estadoModelAssembler.toCollectionModel(todosEstados);
 	}
 	
 	@GetMapping("/{estadoId}")
 	public EstadoModel buscar(@PathVariable Long estadoId) {
-		Estado estado = estadoService.buscarOuFalhar(estadoId);
+		FormaPagamanto estado = estadoService.buscarOuFalhar(estadoId);
 		
 		return estadoModelAssembler.toModel(estado);
 	}
@@ -57,7 +57,7 @@ public class EstadoController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public EstadoModel adicionar(@RequestBody @Valid EstadoInput estadoInput) {
-		Estado estado = estadoInputDisassembler.toDomainObject(estadoInput);
+		FormaPagamanto estado = estadoInputDisassembler.toDomainObject(estadoInput);
 		
 		estado = estadoService.salvar(estado);
 		
@@ -67,7 +67,7 @@ public class EstadoController {
 	@PutMapping("/{estadoId}")
 	public EstadoModel atualizar(@PathVariable Long estadoId,
 			@RequestBody @Valid EstadoInput estadoInput) {
-		Estado estadoAtual = estadoService.buscarOuFalhar(estadoId);
+		FormaPagamanto estadoAtual = estadoService.buscarOuFalhar(estadoId);
 		
 		estadoInputDisassembler.copyToDomainObject(estadoInput, estadoAtual);
 		
