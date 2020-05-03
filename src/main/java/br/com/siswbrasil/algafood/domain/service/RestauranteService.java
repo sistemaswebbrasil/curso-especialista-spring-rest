@@ -13,6 +13,7 @@ import br.com.siswbrasil.algafood.domain.model.Cidade;
 import br.com.siswbrasil.algafood.domain.model.Cozinha;
 import br.com.siswbrasil.algafood.domain.model.FormaPagamento;
 import br.com.siswbrasil.algafood.domain.model.Restaurante;
+import br.com.siswbrasil.algafood.domain.model.Usuario;
 import br.com.siswbrasil.algafood.domain.repository.RestauranteRepository;
 
 @Service
@@ -31,6 +32,9 @@ public class RestauranteService {
 
 	@Autowired
 	private FormaPagamentoService formaPagamentoService;
+
+	@Autowired
+	private UsuarioService usuarioService;
 
 	public Restaurante salvar(Restaurante restaurante) {
 		Long cozinhaId = restaurante.getCozinha().getId();
@@ -91,19 +95,35 @@ public class RestauranteService {
 
 		restaurante.adicionarFormaPagamento(formaPagamento);
 	}
-	
+
 	@Transactional
 	public void abrir(Long restauranteId) {
-	    Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
-	    
-	    restauranteAtual.abrir();
+		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
+
+		restauranteAtual.abrir();
 	}
 
 	@Transactional
 	public void fechar(Long restauranteId) {
-	    Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
-	    
-	    restauranteAtual.fechar();
-	} 	
+		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
+
+		restauranteAtual.fechar();
+	}
+
+	@Transactional
+	public void desassociarResponsavel(Long restauranteId, Long usuarioId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
+
+		restaurante.removerResponsavel(usuario);
+	}
+
+	@Transactional
+	public void associarResponsavel(Long restauranteId, Long usuarioId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
+
+		restaurante.adicionarResponsavel(usuario);
+	}
 
 }
