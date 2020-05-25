@@ -1,15 +1,11 @@
 package br.com.siswbrasil.algafood.domain.service;
 
-import java.time.OffsetDateTime;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.siswbrasil.algafood.domain.exception.NegocioException;
 import br.com.siswbrasil.algafood.domain.model.Pedido;
-import br.com.siswbrasil.algafood.domain.model.StatusPedido;
 
 @Service
 public class FluxoPedidoService {
@@ -18,20 +14,20 @@ public class FluxoPedidoService {
 	private EmissaoPedidoService emissaoPedido;
 	
 	@Transactional
-	public void confirmar(Long pedidoId) {
-		Pedido pedido = emissaoPedido.buscarOuFalhar(pedidoId);
+	public void confirmar(String codigoPedido) {
+		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
 		pedido.confirmar();
 	}
 	
 	@Transactional
-	public void cancelar(Long pedidoId) {
-		Pedido pedido = emissaoPedido.buscarOuFalhar(pedidoId);
+	public void cancelar(String codigoPedido) {
+		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
 		pedido.cancelar();
 	}
 	
 	@Transactional
-	public void entregar(Long pedidoId) {
-		Pedido pedido = emissaoPedido.buscarOuFalhar(pedidoId);
+	public void entregar(String codigoPedido) {
+		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
 		pedido.entregar();
 	}
 	

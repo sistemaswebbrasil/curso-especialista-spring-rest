@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.siswbrasil.algafood.domain.exception.EntidadeEmUsoException;
 import br.com.siswbrasil.algafood.domain.exception.EstadoNaoEncontradoException;
+import br.com.siswbrasil.algafood.domain.exception.FormaPagamentoNaoEncontradaException;
 import br.com.siswbrasil.algafood.domain.model.FormaPagamento;
 import br.com.siswbrasil.algafood.domain.repository.FormaPagamentoRepository;
 
@@ -30,7 +31,7 @@ public class FormaPagamentoService {
 			formaPagamentoRepository.flush();
 
 		} catch (EmptyResultDataAccessException e) {
-			throw new EstadoNaoEncontradoException(id);
+			throw new FormaPagamentoNaoEncontradaException(id);
 
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(String.format(MSG_FORMA_PAGAMENTO_EM_USO, id));
@@ -39,6 +40,6 @@ public class FormaPagamentoService {
 
 	public FormaPagamento buscarOuFalhar(Long id) {
 		return formaPagamentoRepository.findById(id)
-				.orElseThrow(() -> new EstadoNaoEncontradoException(id));
+				.orElseThrow(() -> new FormaPagamentoNaoEncontradaException(id));
 	}
 }

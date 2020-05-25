@@ -1,7 +1,7 @@
 package br.com.siswbrasil.algafood.api.model.input;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +14,7 @@ public class ItemPedidoInput {
     private Long produtoId;
     
     @NotNull
-    @PositiveOrZero
+    @Min(1)
     private Integer quantidade;
     
     private String observacao;   
