@@ -1,4 +1,4 @@
-package br.com.siswbrasil.algafood.infrastructure.service;
+package br.com.siswbrasil.algafood.infrastructure.service.query;
 
 import java.util.ArrayList;
 import java.util.Date;
