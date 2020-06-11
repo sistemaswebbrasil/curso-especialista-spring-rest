@@ -1,11 +1,16 @@
 package br.com.siswbrasil.algafood.api.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +55,26 @@ public class RestauranteProdutoFotoController {
 		FotoProduto fotoSalva = catalogoFotoProduto.salvar(foto,arquivo.getInputStream());
 		
 		return fotoProdutoModelAssembler.toModel(fotoSalva);
+	}
+	
+
+	@GetMapping()
+	public ResponseEntity<byte[]> recuperar(
+			@PathVariable Long restauranteId,
+			@PathVariable Long produtoId
+	) throws IOException {
+		cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
+		
+		Optional<FotoProduto>  fotoProduto = catalogoFotoProduto.findFotoById(restauranteId, produtoId);		
+		byte[] bytesPdf = catalogoFotoProduto.recuperar(fotoProduto.get().getNomeArquivo()).readAllBytes();
+		
+		var headers = new HttpHeaders();
+		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;");		
+		
+		return ResponseEntity.ok()
+				.contentType(MediaType.IMAGE_JPEG)
+				.headers(headers)
+				.body(bytesPdf);		
 	}
 	
 }

@@ -49,4 +49,12 @@ public class CatalogoFotoProdutoService {
 		return foto;
 	}
 	
+	public Optional<FotoProduto> findFotoById(Long restauranteId,Long produtoId){
+		return produtoRepository.findFotoById(restauranteId, produtoId);
+	}
+	
+	public InputStream recuperar(String nomeArquivo) {
+		return fotoStorage.recuperar(nomeArquivo);
+	}
+	
 }
