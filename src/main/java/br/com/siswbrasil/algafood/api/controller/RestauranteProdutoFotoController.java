@@ -1,11 +1,12 @@
 package br.com.siswbrasil.algafood.api.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 import br.com.siswbrasil.algafood.api.assembler.FotoProdutoModelAssembler;
 import br.com.siswbrasil.algafood.api.model.FotoProdutoModel;
 import br.com.siswbrasil.algafood.api.model.input.FotoProdutoInput;
+import br.com.siswbrasil.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.siswbrasil.algafood.domain.model.FotoProduto;
 import br.com.siswbrasil.algafood.domain.model.Produto;
 import br.com.siswbrasil.algafood.domain.service.CatalogoFotoProdutoService;
+import br.com.siswbrasil.algafood.domain.service.FotoStorageService;
 import br.com.siswbrasil.algafood.domain.service.ProdutoService;
 
 @RestController
@@ -29,58 +32,54 @@ public class RestauranteProdutoFotoController {
 
 	@Autowired
 	private ProdutoService cadastroProduto;
-	
+
 	@Autowired
 	private CatalogoFotoProdutoService catalogoFotoProduto;
-	
+
+	@Autowired
+	private FotoStorageService fotoStorage;
+
 	@Autowired
 	private FotoProdutoModelAssembler fotoProdutoModelAssembler;
-	
+
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId,
-			@PathVariable Long produtoId, @Valid FotoProdutoInput fotoProdutoInput) throws IOException {
+	public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId,
+			@Valid FotoProdutoInput fotoProdutoInput) throws IOException {
 		Produto produto = cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
-		
+
 		MultipartFile arquivo = fotoProdutoInput.getArquivo();
-		
+
 		FotoProduto foto = new FotoProduto();
 		foto.setProduto(produto);
 		foto.setDescricao(fotoProdutoInput.getDescricao());
 		foto.setContentType(arquivo.getContentType());
 		foto.setTamanho(arquivo.getSize());
 		foto.setNomeArquivo(arquivo.getOriginalFilename());
-		
-		FotoProduto fotoSalva = catalogoFotoProduto.salvar(foto,arquivo.getInputStream());
-		
+
+		FotoProduto fotoSalva = catalogoFotoProduto.salvar(foto, arquivo.getInputStream());
+
 		return fotoProdutoModelAssembler.toModel(fotoSalva);
 	}
-	
-	@GetMapping
-	public FotoProdutoModel buscar(@PathVariable Long restauranteId, 
-	        @PathVariable Long produtoId) {
-	    FotoProduto fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
-	    
-	    return fotoProdutoModelAssembler.toModel(fotoProduto);
-	}	
-	
 
-	@GetMapping("/image")
-	public ResponseEntity<byte[]> recuperar(
-			@PathVariable Long restauranteId,
-			@PathVariable Long produtoId
-	) throws IOException {
-		cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
-		
-		FotoProduto  fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);		
-		byte[] bytesPdf = catalogoFotoProduto.recuperarFoto(fotoProduto.getNomeArquivo()).readAllBytes();
-		
-		var headers = new HttpHeaders();
-		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;");		
-		
-		return ResponseEntity.ok()
-				.contentType(MediaType.IMAGE_JPEG)
-				.headers(headers)
-				.body(bytesPdf);		
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public FotoProdutoModel buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+		FotoProduto fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
+
+		return fotoProdutoModelAssembler.toModel(fotoProduto);
 	}
-	
+
+	@GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
+	public ResponseEntity<InputStreamResource> servirFoto(@PathVariable Long restauranteId,
+			@PathVariable Long produtoId) {
+		try {
+			FotoProduto fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
+
+			InputStream inputStream = fotoStorage.recuperar(fotoProduto.getNomeArquivo());
+
+			return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(new InputStreamResource(inputStream));
+		} catch (EntidadeNaoEncontradaException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
 }

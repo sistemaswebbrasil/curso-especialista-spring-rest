@@ -55,8 +55,4 @@ public class CatalogoFotoProdutoService {
 	            .orElseThrow(() -> new FotoProdutoNaoEncontradaException(restauranteId, produtoId));
 	}
 	
-	public InputStream recuperarFoto(String nomeArquivo) {
-		return fotoStorage.recuperar(nomeArquivo);
-	}
-	
 }
