@@ -48,7 +48,7 @@ public class RestauranteProdutoController {
 	public List<ProdutoModel> listar(@PathVariable Long restauranteId) {
 		Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
 
-		List<Produto> todosProdutos = produtoRepository.findByRestaurante(restaurante);
+		List<Produto> todosProdutos = produtoRepository.findTodosByRestaurante(restaurante);
 
 		return produtoModelAssembler.toCollectionModel(todosProdutos);
 	}
