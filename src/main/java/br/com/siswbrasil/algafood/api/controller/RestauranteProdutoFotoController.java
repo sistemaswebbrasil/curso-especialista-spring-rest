@@ -1,8 +1,6 @@
 package br.com.siswbrasil.algafood.api.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -57,16 +55,24 @@ public class RestauranteProdutoFotoController {
 		return fotoProdutoModelAssembler.toModel(fotoSalva);
 	}
 	
+	@GetMapping
+	public FotoProdutoModel buscar(@PathVariable Long restauranteId, 
+	        @PathVariable Long produtoId) {
+	    FotoProduto fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
+	    
+	    return fotoProdutoModelAssembler.toModel(fotoProduto);
+	}	
+	
 
-	@GetMapping()
+	@GetMapping("/image")
 	public ResponseEntity<byte[]> recuperar(
 			@PathVariable Long restauranteId,
 			@PathVariable Long produtoId
 	) throws IOException {
 		cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
 		
-		Optional<FotoProduto>  fotoProduto = catalogoFotoProduto.findFotoById(restauranteId, produtoId);		
-		byte[] bytesPdf = catalogoFotoProduto.recuperar(fotoProduto.get().getNomeArquivo()).readAllBytes();
+		FotoProduto  fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);		
+		byte[] bytesPdf = catalogoFotoProduto.recuperarFoto(fotoProduto.getNomeArquivo()).readAllBytes();
 		
 		var headers = new HttpHeaders();
 		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;");		
