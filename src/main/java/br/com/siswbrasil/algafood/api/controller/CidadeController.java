@@ -25,7 +25,9 @@ import br.com.siswbrasil.algafood.domain.exception.NegocioException;
 import br.com.siswbrasil.algafood.domain.model.Cidade;
 import br.com.siswbrasil.algafood.domain.repository.CidadeRepository;
 import br.com.siswbrasil.algafood.domain.service.CidadeService;
+import io.swagger.annotations.Api;
 
+@Api(tags = "Cidades")
 @RestController
 @RequestMapping(value = "/cidades")
 public class CidadeController {
