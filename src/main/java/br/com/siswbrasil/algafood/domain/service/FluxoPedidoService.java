@@ -6,30 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.siswbrasil.algafood.domain.model.Pedido;
-import br.com.siswbrasil.algafood.domain.service.EnvioEmailService.Mensagem;
+import br.com.siswbrasil.algafood.domain.repository.PedidoRepository;
 
 @Service
 public class FluxoPedidoService {
 
 	@Autowired
 	private EmissaoPedidoService emissaoPedido;
-
+	
 	@Autowired
-	private EnvioEmailService envioEmail;
+	private PedidoRepository pedidoRepository;
 
 	@Transactional
 	public void confirmar(String codigoPedido) {
 		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
 		pedido.confirmar();
-
-		var mensagem = Mensagem.builder()
-				.assunto(pedido.getRestaurante().getNome() + " - Pedido confirmado")
-				.corpo("pedido-confirmado.html")
-				.variavel("pedido", pedido)				
-				.destinatario(pedido.getCliente().getEmail())
-				.build();
-
-		envioEmail.enviar(mensagem);
+		
+		pedidoRepository.save(pedido);
 	}
 
 	@Transactional
