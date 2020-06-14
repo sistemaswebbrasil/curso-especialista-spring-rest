@@ -1,4 +1,4 @@
-package br.com.siswbrasil.algafood.core.openapi;
+package br.com.siswbrasil.algafood.core.springfox;
 
 import java.io.File;
 import java.io.InputStream;
