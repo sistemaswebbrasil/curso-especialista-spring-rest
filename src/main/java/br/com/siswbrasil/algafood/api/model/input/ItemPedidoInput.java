@@ -1,8 +1,9 @@
 package br.com.siswbrasil.algafood.api.model.input;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,12 +11,16 @@ import lombok.Setter;
 @Getter
 public class ItemPedidoInput {
 
-    @NotNull
-    private Long produtoId;
-    
-    @NotNull
-    @Min(1)
-    private Integer quantidade;
-    
-    private String observacao;   
+	@ApiModelProperty(example = "1", required = true)
+	@NotNull
+	private Long produtoId;
+	
+	@ApiModelProperty(example = "2", required = true)
+	@NotNull
+	@PositiveOrZero
+	private Integer quantidade;
+	
+	@ApiModelProperty(example = "Menos picante, por favor")
+	private String observacao;
+	
 }
