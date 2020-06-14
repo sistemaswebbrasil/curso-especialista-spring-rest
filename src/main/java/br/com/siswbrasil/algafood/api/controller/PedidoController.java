@@ -26,7 +26,7 @@ import br.com.siswbrasil.algafood.api.assembler.PedidoResumoModelAssembler;
 import br.com.siswbrasil.algafood.api.model.PedidoModel;
 import br.com.siswbrasil.algafood.api.model.PedidoResumoModel;
 import br.com.siswbrasil.algafood.api.model.input.PedidoInput;
-import br.com.siswbrasil.algafood.api.openapi.model.PedidoControllerOpenApi;
+import br.com.siswbrasil.algafood.api.openapi.controller.PedidoControllerOpenApi;
 import br.com.siswbrasil.algafood.core.data.PageableTranslator;
 import br.com.siswbrasil.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.siswbrasil.algafood.domain.exception.NegocioException;
