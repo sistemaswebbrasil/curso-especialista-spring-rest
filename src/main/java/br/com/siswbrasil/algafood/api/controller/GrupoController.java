@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.siswbrasil.algafood.api.assembler.GrupoInputDisassembler;
 import br.com.siswbrasil.algafood.api.assembler.GrupoModelAssembler;
-import br.com.siswbrasil.algafood.api.controller.openapi.GrupoControllerOpenApi;
 import br.com.siswbrasil.algafood.api.model.GrupoModel;
 import br.com.siswbrasil.algafood.api.model.input.GrupoInput;
+import br.com.siswbrasil.algafood.api.openapi.controller.GrupoControllerOpenApi;
 import br.com.siswbrasil.algafood.domain.model.Grupo;
 import br.com.siswbrasil.algafood.domain.repository.GrupoRepository;
 import br.com.siswbrasil.algafood.domain.service.GrupoService;

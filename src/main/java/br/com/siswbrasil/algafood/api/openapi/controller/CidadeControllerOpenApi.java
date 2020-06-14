@@ -1,4 +1,4 @@
-package br.com.siswbrasil.algafood.api.controller.openapi;
+package br.com.siswbrasil.algafood.api.openapi.controller;
 
 import java.util.List;
 
