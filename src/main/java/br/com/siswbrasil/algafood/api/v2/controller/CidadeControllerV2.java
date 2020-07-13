@@ -23,6 +23,7 @@ import br.com.siswbrasil.algafood.api.v2.assembler.CidadeInputDisassemblerV2;
 import br.com.siswbrasil.algafood.api.v2.assembler.CidadeModelAssemblerV2;
 import br.com.siswbrasil.algafood.api.v2.model.CidadeModelV2;
 import br.com.siswbrasil.algafood.api.v2.model.input.CidadeInputV2;
+import br.com.siswbrasil.algafood.api.v2.openapi.controller.CidadeControllerV2OpenApi;
 import br.com.siswbrasil.algafood.domain.exception.EstadoNaoEncontradoException;
 import br.com.siswbrasil.algafood.domain.exception.NegocioException;
 import br.com.siswbrasil.algafood.domain.model.Cidade;
@@ -31,7 +32,7 @@ import br.com.siswbrasil.algafood.domain.service.CadastroCidadeService;
 
 @RestController
 @RequestMapping(path = "/v2/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CidadeControllerV2 {
+public class CidadeControllerV2 implements CidadeControllerV2OpenApi{
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
