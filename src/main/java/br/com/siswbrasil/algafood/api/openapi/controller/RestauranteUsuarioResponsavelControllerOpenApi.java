@@ -2,6 +2,8 @@ package br.com.siswbrasil.algafood.api.openapi.controller;
 
 import java.util.List;
 
+import org.springframework.hateoas.CollectionModel;
+
 import br.com.siswbrasil.algafood.api.exceptionhandler.Problem;
 import br.com.siswbrasil.algafood.api.model.UsuarioModel;
 import io.swagger.annotations.Api;
@@ -17,7 +19,7 @@ public interface RestauranteUsuarioResponsavelControllerOpenApi {
     @ApiResponses({
         @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    List<UsuarioModel> listar(
+    CollectionModel<UsuarioModel> listar(
             @ApiParam(value = "ID do restaurante", example = "1", required = true)
             Long restauranteId);
 

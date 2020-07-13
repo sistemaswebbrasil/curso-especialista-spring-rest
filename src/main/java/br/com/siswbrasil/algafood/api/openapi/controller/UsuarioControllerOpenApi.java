@@ -1,6 +1,6 @@
 package br.com.siswbrasil.algafood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import br.com.siswbrasil.algafood.api.exceptionhandler.Problem;
 import br.com.siswbrasil.algafood.api.model.UsuarioModel;
@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiResponses;
 public interface UsuarioControllerOpenApi {
 
     @ApiOperation("Lista os usuários")
-    List<UsuarioModel> listar();
+    CollectionModel<UsuarioModel> listar();
 
     @ApiOperation("Busca um usuário por ID")
     @ApiResponses({
