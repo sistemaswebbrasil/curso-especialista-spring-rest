@@ -1,7 +1,6 @@
 package br.com.siswbrasil.algafood.api.assembler;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +8,8 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import br.com.siswbrasil.algafood.api.AlgaLinks;
 import br.com.siswbrasil.algafood.api.controller.UsuarioController;
-import br.com.siswbrasil.algafood.api.controller.UsuarioGrupoController;
 import br.com.siswbrasil.algafood.api.model.UsuarioModel;
 import br.com.siswbrasil.algafood.domain.model.Usuario;
 
@@ -19,6 +18,9 @@ public class UsuarioModelAssembler extends RepresentationModelAssemblerSupport<U
 
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private AlgaLinks algaLinks;	
 
 	public UsuarioModelAssembler() {
 		super(UsuarioController.class, UsuarioModel.class);
@@ -26,15 +28,14 @@ public class UsuarioModelAssembler extends RepresentationModelAssemblerSupport<U
 
 	@Override
 	public UsuarioModel toModel(Usuario usuario) {
-		UsuarioModel usuarioModel = createModelWithId(usuario.getId(), usuario);
-		modelMapper.map(usuario, usuarioModel);
-
-		usuarioModel.add(linkTo(UsuarioController.class).withRel("usuarios"));
-
-		usuarioModel
-				.add(linkTo(methodOn(UsuarioGrupoController.class).listar(usuario.getId())).withRel("grupos-usuario"));
-
-		return usuarioModel;
+	    UsuarioModel usuarioModel = createModelWithId(usuario.getId(), usuario);
+	    modelMapper.map(usuario, usuarioModel);
+	    
+	    usuarioModel.add(algaLinks.linkToUsuarios("usuarios"));
+	    
+	    usuarioModel.add(algaLinks.linkToGruposUsuario(usuario.getId(), "grupos-usuario"));
+	    
+	    return usuarioModel;
 	}
 
 	@Override
