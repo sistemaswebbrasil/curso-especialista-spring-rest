@@ -1,12 +1,14 @@
 package br.com.siswbrasil.algafood.api.controller;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,7 +36,7 @@ import io.swagger.annotations.Api;
 
 @Api(tags = "Cidades")
 @RestController
-@RequestMapping(path = "/cidades", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+@RequestMapping(path = "/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CidadeController implements CidadeControllerOpenApi {
 
 	@Autowired
@@ -49,11 +51,29 @@ public class CidadeController implements CidadeControllerOpenApi {
 	@Autowired
 	private CidadeInputDisassembler cidadeInputDisassembler;
 
+	@Override
 	@GetMapping
-	public List<CidadeModel> listar() {
+	public CollectionModel<CidadeModel> listar() {
 		List<Cidade> todasCidades = cidadeRepository.findAll();
-
-		return cidadeModelAssembler.toCollectionModel(todasCidades);
+		
+		List<CidadeModel> cidadesModel = cidadeModelAssembler.toCollectionModel(todasCidades);
+		
+		cidadesModel.forEach(cidadeModel -> {
+			cidadeModel.add(linkTo(methodOn(CidadeController.class)
+					.buscar(cidadeModel.getId())).withSelfRel());
+			
+			cidadeModel.add(linkTo(methodOn(CidadeController.class)
+					.listar()).withRel("cidades"));
+			
+			cidadeModel.getEstado().add(linkTo(methodOn(EstadoController.class)
+					.buscar(cidadeModel.getEstado().getId())).withSelfRel());
+		});
+		
+		CollectionModel<CidadeModel> cidadesCollectionModel = new CollectionModel<>(cidadesModel);
+		
+		cidadesCollectionModel.add(linkTo(CidadeController.class).withSelfRel());
+		
+		return cidadesCollectionModel;
 	}
 
 	@Override
@@ -63,22 +83,27 @@ public class CidadeController implements CidadeControllerOpenApi {
 		
 		CidadeModel cidadeModel = cidadeModelAssembler.toModel(cidade);
 		
-		cidadeModel.add(linkTo(CidadeController.class)
-				.slash(cidadeModel.getId()).withSelfRel());
+		cidadeModel.add(linkTo(methodOn(CidadeController.class)
+				.buscar(cidadeModel.getId())).withSelfRel());
 		
-//		cidadeModel.add(new Link("http://api.algafood.local:8080/cidades/1"));
+//		cidadeModel.add(linkTo(CidadeController.class)
+//				.slash(cidadeModel.getId()).withSelfRel());
 		
-		cidadeModel.add(linkTo(CidadeController.class)
-				.withRel("cidades"));
+		cidadeModel.add(linkTo(methodOn(CidadeController.class)
+				.listar()).withRel("cidades"));
 		
-//		cidadeModel.add(new Link("http://api.algafood.local:8080/cidades", "cidades"));
+//		cidadeModel.add(linkTo(CidadeController.class)
+//				.withRel("cidades"));
 		
-		cidadeModel.getEstado().add(linkTo(EstadoController.class)
-				.slash(cidadeModel.getEstado().getId()).withSelfRel());
+		cidadeModel.getEstado().add(linkTo(methodOn(EstadoController.class)
+				.buscar(cidadeModel.getEstado().getId())).withSelfRel());
 		
-//		cidadeModel.getEstado().add(new Link("http://api.algafood.local:8080/estados/1"));
+//		cidadeModel.getEstado().add(linkTo(EstadoController.class)
+//				.slash(cidadeModel.getEstado().getId()).withSelfRel());
 		
-		return cidadeModel;
+		return cidadeModel;		
+		
+
 	}
 
 	@Override

@@ -27,7 +27,7 @@ import br.com.siswbrasil.algafood.domain.repository.GrupoRepository;
 import br.com.siswbrasil.algafood.domain.service.GrupoService;
 
 @RestController
-@RequestMapping(path = "/grupos" , produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+@RequestMapping(path = "/grupos" , produces = MediaType.APPLICATION_JSON_VALUE)
 public class GrupoController implements GrupoControllerOpenApi{
 
 	@Autowired
