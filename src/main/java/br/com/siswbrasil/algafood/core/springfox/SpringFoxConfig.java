@@ -33,6 +33,7 @@ import br.com.siswbrasil.algafood.api.model.FormaPagamentoModel;
 import br.com.siswbrasil.algafood.api.model.GrupoModel;
 import br.com.siswbrasil.algafood.api.model.PedidoResumoModel;
 import br.com.siswbrasil.algafood.api.model.PermissaoModel;
+import br.com.siswbrasil.algafood.api.model.ProdutoModel;
 import br.com.siswbrasil.algafood.api.openapi.model.CidadesModelOpenApi;
 import br.com.siswbrasil.algafood.api.openapi.model.CozinhasModelOpenApi;
 import br.com.siswbrasil.algafood.api.openapi.model.EstadosModelOpenApi;
@@ -42,6 +43,7 @@ import br.com.siswbrasil.algafood.api.openapi.model.LinksModelOpenApi;
 import br.com.siswbrasil.algafood.api.openapi.model.PageableModelOpenApi;
 import br.com.siswbrasil.algafood.api.openapi.model.PedidosResumoModelOpenApi;
 import br.com.siswbrasil.algafood.api.openapi.model.PermissoesModelOpenApi;
+import br.com.siswbrasil.algafood.api.openapi.model.ProdutosModelOpenApi;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -113,7 +115,11 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				
 				.alternateTypeRules(AlternateTypeRules.newRule(
 					    typeResolver.resolve(PagedModel.class, PedidoResumoModel.class),
-					    PedidosResumoModelOpenApi.class))					
+					    PedidosResumoModelOpenApi.class))
+				
+				.alternateTypeRules(AlternateTypeRules.newRule(
+					    typeResolver.resolve(CollectionModel.class, ProdutoModel.class),
+					    ProdutosModelOpenApi.class))				
 				
 	            .apiInfo(apiInfo())
 	            .tags(new Tag("Cidades", "Gerencia as cidades"),
