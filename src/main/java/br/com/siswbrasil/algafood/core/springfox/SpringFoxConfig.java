@@ -29,10 +29,12 @@ import br.com.siswbrasil.algafood.api.exceptionhandler.Problem;
 import br.com.siswbrasil.algafood.api.model.CidadeModel;
 import br.com.siswbrasil.algafood.api.model.CozinhaModel;
 import br.com.siswbrasil.algafood.api.model.EstadoModel;
+import br.com.siswbrasil.algafood.api.model.FormaPagamentoModel;
 import br.com.siswbrasil.algafood.api.model.PedidoResumoModel;
 import br.com.siswbrasil.algafood.api.openapi.model.CidadesModelOpenApi;
 import br.com.siswbrasil.algafood.api.openapi.model.CozinhasModelOpenApi;
 import br.com.siswbrasil.algafood.api.openapi.model.EstadosModelOpenApi;
+import br.com.siswbrasil.algafood.api.openapi.model.FormasPagamentoModelOpenApi;
 import br.com.siswbrasil.algafood.api.openapi.model.LinksModelOpenApi;
 import br.com.siswbrasil.algafood.api.openapi.model.PageableModelOpenApi;
 import br.com.siswbrasil.algafood.api.openapi.model.PedidosResumoModelOpenApi;
@@ -91,7 +93,12 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				
 				.alternateTypeRules(AlternateTypeRules.newRule(
 				        typeResolver.resolve(CollectionModel.class, EstadoModel.class),
-				        EstadosModelOpenApi.class))				
+				        EstadosModelOpenApi.class))		
+				
+				.alternateTypeRules(AlternateTypeRules.newRule(
+					    typeResolver.resolve(CollectionModel.class, FormaPagamentoModel.class),
+					    FormasPagamentoModelOpenApi.class))
+				
 	            .apiInfo(apiInfo())
 	            .tags(new Tag("Cidades", "Gerencia as cidades"),
 	                    new Tag("Grupos", "Gerencia os grupos de usuários"),
