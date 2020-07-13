@@ -4,8 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.siswbrasil.algafood.api.model.EnderecoModel;
-import br.com.siswbrasil.algafood.api.model.input.ItemPedidoInput;
+import br.com.siswbrasil.algafood.api.v1.model.EnderecoModel;
+import br.com.siswbrasil.algafood.api.v1.model.input.ItemPedidoInput;
 import br.com.siswbrasil.algafood.domain.model.Endereco;
 import br.com.siswbrasil.algafood.domain.model.ItemPedido;
 
