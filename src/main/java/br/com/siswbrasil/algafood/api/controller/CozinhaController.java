@@ -1,14 +1,13 @@
 package br.com.siswbrasil.algafood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,17 +45,18 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 	@Autowired
 	private CozinhaInputDisassembler cozinhaInputDisassembler;
 	
+	@Autowired
+	private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;	
+	
+	@Override
 	@GetMapping
-	public Page<CozinhaModel> listar(@PageableDefault(size = 10) Pageable pageable) {
+	public PagedModel<CozinhaModel> listar(@PageableDefault(size = 10) Pageable pageable) {
 		Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
 		
-		List<CozinhaModel> cozinhasModel = cozinhaModelAssembler
-				.toCollectionModel(cozinhasPage.getContent());
-		
-		Page<CozinhaModel> cozinhasModelPage = new PageImpl<>(cozinhasModel, pageable, 
-				cozinhasPage.getTotalElements());
-		
-		return cozinhasModelPage;
+		PagedModel<CozinhaModel> cozinhasPagedModel = pagedResourcesAssembler.toModel(cozinhasPage, cozinhaModelAssembler);
+
+		  
+		return cozinhasPagedModel;
 	}
 	
 	@GetMapping("/{cozinhaId}")
@@ -67,7 +67,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 	}
 	
 	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.CREATED)  
 	public CozinhaModel adicionar(@RequestBody @Valid CozinhaInput cozinhaInput) {
 		Cozinha cozinha = cozinhaInputDisassembler.toDomainObject(cozinhaInput);
 		cozinha = cozinhaService.salvar(cozinha);
