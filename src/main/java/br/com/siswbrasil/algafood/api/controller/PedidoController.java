@@ -44,19 +44,19 @@ public class PedidoController implements PedidoControllerOpenApi {
 
 	@Autowired
 	private PedidoRepository pedidoRepository;
-
+	
 	@Autowired
 	private EmissaoPedidoService emissaoPedido;
-
+	
 	@Autowired
 	private PedidoModelAssembler pedidoModelAssembler;
-
+	
 	@Autowired
 	private PedidoResumoModelAssembler pedidoResumoModelAssembler;
-
+	
 	@Autowired
 	private PedidoInputDisassembler pedidoInputDisassembler;
-
+	
 	@Autowired
 	private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 	
@@ -74,6 +74,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 		return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoModelAssembler);
 	}
 	
+	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public PedidoModel adicionar(@Valid @RequestBody PedidoInput pedidoInput) {
@@ -91,7 +92,8 @@ public class PedidoController implements PedidoControllerOpenApi {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
-
+	
+	@Override
 	@GetMapping("/{codigoPedido}")
 	public PedidoModel buscar(@PathVariable String codigoPedido) {
 		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
@@ -113,7 +115,6 @@ public class PedidoController implements PedidoControllerOpenApi {
 			);
 		
 		return PageableTranslator.translate(apiPageable, mapeamento);
-	}	
-
+	}
 	
 }

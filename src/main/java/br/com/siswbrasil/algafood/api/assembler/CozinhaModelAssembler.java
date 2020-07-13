@@ -18,7 +18,7 @@ public class CozinhaModelAssembler
 	private ModelMapper modelMapper;
 	
 	@Autowired
-	private AlgaLinks algaLinks;	
+	private AlgaLinks algaLinks;
 	
 	public CozinhaModelAssembler() {
 		super(CozinhaController.class, CozinhaModel.class);
@@ -26,12 +26,12 @@ public class CozinhaModelAssembler
 	
 	@Override
 	public CozinhaModel toModel(Cozinha cozinha) {
-	    CozinhaModel cozinhaModel = createModelWithId(cozinha.getId(), cozinha);
-	    modelMapper.map(cozinha, cozinhaModel);
-	    
-	    cozinhaModel.add(algaLinks.linkToCozinhas("cozinhas"));
-	    
-	    return cozinhaModel;
+		CozinhaModel cozinhaModel = createModelWithId(cozinha.getId(), cozinha);
+		modelMapper.map(cozinha, cozinhaModel);
+		
+		cozinhaModel.add(algaLinks.linkToCozinhas("cozinhas"));
+		
+		return cozinhaModel;
 	}
 	
 }

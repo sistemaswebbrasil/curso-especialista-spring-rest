@@ -17,14 +17,14 @@ import br.com.siswbrasil.algafood.domain.model.Usuario;
 import br.com.siswbrasil.algafood.domain.repository.UsuarioRepository;
 
 @Service
-public class UsuarioService {
+public class CadastroUsuarioService {
 	private static final String MSG_USUARIO_EM_USO = "usuário de código %d não pode ser removido, pois está em uso";
 
 	@Autowired
 	UsuarioRepository usuarioRepository;
 	
 	@Autowired
-	GrupoService grupoService;	
+	CadastroGrupoService grupoService;	
 
 	@Transactional
 	public Usuario salvar(Usuario usuario) {

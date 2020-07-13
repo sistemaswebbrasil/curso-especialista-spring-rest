@@ -8,13 +8,12 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import br.com.siswbrasil.algafood.domain.exception.EntidadeEmUsoException;
-import br.com.siswbrasil.algafood.domain.exception.EstadoNaoEncontradoException;
 import br.com.siswbrasil.algafood.domain.exception.FormaPagamentoNaoEncontradaException;
 import br.com.siswbrasil.algafood.domain.model.FormaPagamento;
 import br.com.siswbrasil.algafood.domain.repository.FormaPagamentoRepository;
 
 @Service
-public class FormaPagamentoService {
+public class CadastroFormaPagamentoService {
 	private static final String MSG_FORMA_PAGAMENTO_EM_USO = "Forma de pagamento de código %d não pode ser removido, pois está em uso";
 
 	@Autowired

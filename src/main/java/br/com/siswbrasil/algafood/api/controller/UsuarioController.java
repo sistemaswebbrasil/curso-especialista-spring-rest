@@ -26,7 +26,7 @@ import br.com.siswbrasil.algafood.api.model.input.UsuarioInput;
 import br.com.siswbrasil.algafood.api.openapi.controller.UsuarioControllerOpenApi;
 import br.com.siswbrasil.algafood.domain.model.Usuario;
 import br.com.siswbrasil.algafood.domain.repository.UsuarioRepository;
-import br.com.siswbrasil.algafood.domain.service.UsuarioService;
+import br.com.siswbrasil.algafood.domain.service.CadastroUsuarioService;
 
 @RestController
 @RequestMapping(path = "/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -34,16 +34,16 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-
+	
 	@Autowired
-	private UsuarioService usuarioService;
-
+	private CadastroUsuarioService cadastroUsuario;
+	
 	@Autowired
 	private UsuarioModelAssembler usuarioModelAssembler;
-
+	
 	@Autowired
 	private UsuarioInputDisassembler usuarioInputDisassembler;
-
+	
 	@Override
 	@GetMapping
 	public CollectionModel<UsuarioModel> listar() {
@@ -51,37 +51,41 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 		
 		return usuarioModelAssembler.toCollectionModel(todasUsuarios);
 	}
-
+	
 	@Override
 	@GetMapping("/{usuarioId}")
 	public UsuarioModel buscar(@PathVariable Long usuarioId) {
-		Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
+		Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
 		
 		return usuarioModelAssembler.toModel(usuario);
 	}
-
+	
+	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public UsuarioModel adicionar(@RequestBody @Valid UsuarioComSenhaInput usuarioInput) {
 		Usuario usuario = usuarioInputDisassembler.toDomainObject(usuarioInput);
-		usuario = usuarioService.salvar(usuario);
-
+		usuario = cadastroUsuario.salvar(usuario);
+		
 		return usuarioModelAssembler.toModel(usuario);
 	}
-
+	
+	@Override
 	@PutMapping("/{usuarioId}")
-	public UsuarioModel atualizar(@PathVariable Long usuarioId, @RequestBody @Valid UsuarioInput usuarioInput) {
-		Usuario usuarioAtual = usuarioService.buscarOuFalhar(usuarioId);
+	public UsuarioModel atualizar(@PathVariable Long usuarioId,
+			@RequestBody @Valid UsuarioInput usuarioInput) {
+		Usuario usuarioAtual = cadastroUsuario.buscarOuFalhar(usuarioId);
 		usuarioInputDisassembler.copyToDomainObject(usuarioInput, usuarioAtual);
-		usuarioAtual = usuarioService.salvar(usuarioAtual);
-
+		usuarioAtual = cadastroUsuario.salvar(usuarioAtual);
+		
 		return usuarioModelAssembler.toModel(usuarioAtual);
 	}
-
+	
+	@Override
 	@PutMapping("/{usuarioId}/senha")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaInput senha) {
-		usuarioService.alterarSenha(usuarioId, senha.getSenhaAtual(), senha.getNovaSenha());
+		cadastroUsuario.alterarSenha(usuarioId, senha.getSenhaAtual(), senha.getNovaSenha());
 	}
-
+	
 }

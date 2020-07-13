@@ -30,7 +30,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true , callSuper = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 public class Pedido extends AbstractAggregateRoot<Pedido> {
 
@@ -102,6 +102,18 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
 		registerEvent(new PedidoCanceladoEvent(this));
 	}
 	
+	public boolean podeSerConfirmado() {
+		return getStatus().podeAlterarPara(StatusPedido.CONFIRMADO);
+	}
+	
+	public boolean podeSerEntregue() {
+		return getStatus().podeAlterarPara(StatusPedido.ENTREGUE);
+	}
+	
+	public boolean podeSerCancelado() {
+		return getStatus().podeAlterarPara(StatusPedido.CANCELADO);
+	}
+	
 	private void setStatus(StatusPedido novoStatus) {
 		if (getStatus().naoPodeAlterarPara(novoStatus)) {
 			throw new NegocioException(
@@ -116,6 +128,6 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
 	@PrePersist
 	private void gerarCodigo() {
 		setCodigo(UUID.randomUUID().toString());
-	}	
+	}
 	
 }

@@ -22,19 +22,19 @@ public class EmissaoPedidoService {
 	private PedidoRepository pedidoRepository;
 
 	@Autowired
-	private RestauranteService cadastroRestaurante;
+	private CadastroRestauranteService cadastroRestaurante;
 
 	@Autowired
-	private CidadeService cadastroCidade;
+	private CadastroCidadeService cadastroCidade;
 
 	@Autowired
-	private UsuarioService cadastroUsuario;
+	private CadastroUsuarioService cadastroUsuario;
 
 	@Autowired
-	private ProdutoService cadastroProduto;
+	private CadastroProdutoService cadastroProduto;
 
 	@Autowired
-	private FormaPagamentoService cadastroFormaPagamento;
+	private CadastroFormaPagamentoService cadastroFormaPagamento;
 
 	public Pedido buscarOuFalhar(String codigoPedido) {
 		return pedidoRepository.findByCodigo(codigoPedido).orElseThrow(() -> new PedidoNaoEncontradoException(codigoPedido));

@@ -19,7 +19,7 @@ import br.com.siswbrasil.algafood.domain.model.Usuario;
 import br.com.siswbrasil.algafood.domain.repository.RestauranteRepository;
 
 @Service
-public class RestauranteService {
+public class CadastroRestauranteService {
 
 	private static final String MSG_RESTAURANTE_EM_USO = "Restaurante de código %d não pode ser removida, pois está em uso";
 
@@ -27,16 +27,16 @@ public class RestauranteService {
 	private RestauranteRepository restauranteRepository;
 
 	@Autowired
-	private CozinhaService cozinhaService;
+	private CadastroCozinhaService cozinhaService;
 
 	@Autowired
-	private CidadeService cidadeService;
+	private CadastroCidadeService cidadeService;
 
 	@Autowired
-	private FormaPagamentoService formaPagamentoService;
+	private CadastroFormaPagamentoService formaPagamentoService;
 
 	@Autowired
-	private UsuarioService usuarioService;
+	private CadastroUsuarioService usuarioService;
 
 	public Restaurante salvar(Restaurante restaurante) {
 		Long cozinhaId = restaurante.getCozinha().getId();

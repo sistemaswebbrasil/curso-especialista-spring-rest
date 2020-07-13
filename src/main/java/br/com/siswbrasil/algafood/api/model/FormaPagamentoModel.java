@@ -14,8 +14,8 @@ public class FormaPagamentoModel extends RepresentationModel<FormaPagamentoModel
 
 	@ApiModelProperty(example = "1")
 	private Long id;
-
+	
 	@ApiModelProperty(example = "Cartão de crédito")
 	private String descricao;
-
+	
 }

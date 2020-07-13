@@ -14,7 +14,7 @@ import br.com.siswbrasil.algafood.domain.model.Estado;
 import br.com.siswbrasil.algafood.domain.repository.CidadeRepository;
 
 @Service
-public class CidadeService {
+public class CadastroCidadeService {
 
 	private static final String MSG_CIDADE_EM_USO = "Cidade de código %d não pode ser removida, pois está em uso";
 
@@ -22,7 +22,7 @@ public class CidadeService {
 	private CidadeRepository cidadeRepository;
 
 	@Autowired
-	private EstadoService cadastroEstado;
+	private CadastroEstadoService cadastroEstado;
 
 	public Cidade salvar(Cidade cidade) {
 		Long estadoId = cidade.getEstado().getId();

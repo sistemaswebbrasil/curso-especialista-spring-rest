@@ -30,18 +30,18 @@ import br.com.siswbrasil.algafood.api.openapi.controller.RestauranteProdutoFotoC
 import br.com.siswbrasil.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.siswbrasil.algafood.domain.model.FotoProduto;
 import br.com.siswbrasil.algafood.domain.model.Produto;
+import br.com.siswbrasil.algafood.domain.service.CadastroProdutoService;
 import br.com.siswbrasil.algafood.domain.service.CatalogoFotoProdutoService;
 import br.com.siswbrasil.algafood.domain.service.FotoStorageService;
 import br.com.siswbrasil.algafood.domain.service.FotoStorageService.FotoRecuperada;
-import br.com.siswbrasil.algafood.domain.service.ProdutoService;
 
 @RestController
 @RequestMapping(path = "/restaurantes/{restauranteId}/produtos/{produtoId}/foto",
-        produces = MediaType.APPLICATION_JSON_VALUE)
+		produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 
 	@Autowired
-	private ProdutoService cadastroProduto;
+	private CadastroProdutoService cadastroProduto;
 	
 	@Autowired
 	private CatalogoFotoProdutoService catalogoFotoProduto;
@@ -73,6 +73,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 		return fotoProdutoModelAssembler.toModel(fotoSalva);
 	}
 	
+	@Override
 	@DeleteMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void excluir(@PathVariable Long restauranteId, 
@@ -80,6 +81,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 		catalogoFotoProduto.excluir(restauranteId, produtoId);
 	}
 	
+	@Override
 	@GetMapping
 	public FotoProdutoModel buscar(@PathVariable Long restauranteId, 
 			@PathVariable Long produtoId) {
@@ -88,6 +90,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 		return fotoProdutoModelAssembler.toModel(fotoProduto);
 	}
 	
+	@Override
 	@GetMapping(produces = MediaType.ALL_VALUE)
 	public ResponseEntity<?> servir(@PathVariable Long restauranteId, 
 			@PathVariable Long produtoId, @RequestHeader(name = "accept") String acceptHeader) 

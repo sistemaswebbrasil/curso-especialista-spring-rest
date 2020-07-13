@@ -2,7 +2,6 @@ package br.com.siswbrasil.algafood.core.jackson;
 
 import java.io.IOException;
 
-import org.springframework.boot.jackson.JsonComponent;
 import org.springframework.data.domain.Page;
 
 import com.fasterxml.jackson.core.JsonGenerator;

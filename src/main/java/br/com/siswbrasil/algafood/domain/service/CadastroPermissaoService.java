@@ -8,7 +8,7 @@ import br.com.siswbrasil.algafood.domain.model.Permissao;
 import br.com.siswbrasil.algafood.domain.repository.PermissaoRepository;
 
 @Service
-public class PermissaoService {
+public class CadastroPermissaoService {
 	
     @Autowired
     private PermissaoRepository permissaoRepository;

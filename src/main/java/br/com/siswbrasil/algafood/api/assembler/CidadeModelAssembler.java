@@ -21,7 +21,7 @@ public class CidadeModelAssembler
 	private ModelMapper modelMapper;
 	
 	@Autowired
-	private AlgaLinks algaLinks;	
+	private AlgaLinks algaLinks;
 	
 	public CidadeModelAssembler() {
 		super(CidadeController.class, CidadeModel.class);
@@ -29,21 +29,21 @@ public class CidadeModelAssembler
 	
 	@Override
 	public CidadeModel toModel(Cidade cidade) {
-	    CidadeModel cidadeModel = createModelWithId(cidade.getId(), cidade);
-	    
-	    modelMapper.map(cidade, cidadeModel);
-	    
-	    cidadeModel.add(algaLinks.linkToCidades("cidades"));
-	    
-	    cidadeModel.getEstado().add(algaLinks.linkToEstado(cidadeModel.getEstado().getId()));
-	    
-	    return cidadeModel;
+		CidadeModel cidadeModel = createModelWithId(cidade.getId(), cidade);
+		
+		modelMapper.map(cidade, cidadeModel);
+		
+		cidadeModel.add(algaLinks.linkToCidades("cidades"));
+		
+		cidadeModel.getEstado().add(algaLinks.linkToEstado(cidadeModel.getEstado().getId()));
+		
+		return cidadeModel;
 	}
 	
 	@Override
 	public CollectionModel<CidadeModel> toCollectionModel(Iterable<? extends Cidade> entities) {
 		return super.toCollectionModel(entities)
-				.add(linkTo(CidadeController.class).withSelfRel());
+				.add(algaLinks.linkToCidades());
 	}
 	
 }

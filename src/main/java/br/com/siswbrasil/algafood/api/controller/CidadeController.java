@@ -1,8 +1,5 @@
 package br.com.siswbrasil.algafood.api.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import java.util.List;
 
 import javax.validation.Valid;
@@ -31,26 +28,24 @@ import br.com.siswbrasil.algafood.domain.exception.EstadoNaoEncontradoException;
 import br.com.siswbrasil.algafood.domain.exception.NegocioException;
 import br.com.siswbrasil.algafood.domain.model.Cidade;
 import br.com.siswbrasil.algafood.domain.repository.CidadeRepository;
-import br.com.siswbrasil.algafood.domain.service.CidadeService;
-import io.swagger.annotations.Api;
+import br.com.siswbrasil.algafood.domain.service.CadastroCidadeService;
 
-@Api(tags = "Cidades")
 @RestController
 @RequestMapping(path = "/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CidadeController implements CidadeControllerOpenApi {
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
-
+	
 	@Autowired
-	private CidadeService cidadeService;
-
+	private CadastroCidadeService cadastroCidade;
+	
 	@Autowired
 	private CidadeModelAssembler cidadeModelAssembler;
-
+	
 	@Autowired
 	private CidadeInputDisassembler cidadeInputDisassembler;
-
+	
 	@Override
 	@GetMapping
 	public CollectionModel<CidadeModel> listar() {
@@ -58,15 +53,15 @@ public class CidadeController implements CidadeControllerOpenApi {
 		
 		return cidadeModelAssembler.toCollectionModel(todasCidades);
 	}
-
+	
 	@Override
 	@GetMapping("/{cidadeId}")
 	public CidadeModel buscar(@PathVariable Long cidadeId) {
-		Cidade cidade = cidadeService.buscarOuFalhar(cidadeId);
+		Cidade cidade = cadastroCidade.buscarOuFalhar(cidadeId);
 		
 		return cidadeModelAssembler.toModel(cidade);
 	}
-
+	
 	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -74,7 +69,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 		try {
 			Cidade cidade = cidadeInputDisassembler.toDomainObject(cidadeInput);
 			
-			cidade = cidadeService.salvar(cidade);
+			cidade = cadastroCidade.salvar(cidade);
 			
 			CidadeModel cidadeModel = cidadeModelAssembler.toModel(cidade);
 			
@@ -85,26 +80,29 @@ public class CidadeController implements CidadeControllerOpenApi {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
-
+	
+	@Override
 	@PutMapping("/{cidadeId}")
-	public CidadeModel atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeInput cidadeInput) {
+	public CidadeModel atualizar(@PathVariable Long cidadeId,
+			@RequestBody @Valid CidadeInput cidadeInput) {
 		try {
-			Cidade cidadeAtual = cidadeService.buscarOuFalhar(cidadeId);
-
+			Cidade cidadeAtual = cadastroCidade.buscarOuFalhar(cidadeId);
+			
 			cidadeInputDisassembler.copyToDomainObject(cidadeInput, cidadeAtual);
-
-			cidadeAtual = cidadeService.salvar(cidadeAtual);
-
+			
+			cidadeAtual = cadastroCidade.salvar(cidadeAtual);
+			
 			return cidadeModelAssembler.toModel(cidadeAtual);
 		} catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
-
+	
+	@Override
 	@DeleteMapping("/{cidadeId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long cidadeId) {
-		cidadeService.excluir(cidadeId);
+		cadastroCidade.excluir(cidadeId);	
 	}
-
+	
 }

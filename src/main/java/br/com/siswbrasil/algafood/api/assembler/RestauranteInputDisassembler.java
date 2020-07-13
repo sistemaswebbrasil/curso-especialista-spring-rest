@@ -9,7 +9,6 @@ import br.com.siswbrasil.algafood.domain.model.Cidade;
 import br.com.siswbrasil.algafood.domain.model.Cozinha;
 import br.com.siswbrasil.algafood.domain.model.Restaurante;
 
-
 @Component
 public class RestauranteInputDisassembler {
 
@@ -27,9 +26,9 @@ public class RestauranteInputDisassembler {
 		
 		if (restaurante.getEndereco() != null) {
 			restaurante.getEndereco().setCidade(new Cidade());
-		}		
+		}
 		
 		modelMapper.map(restauranteInput, restaurante);
-	}	
+	}
 	
 }

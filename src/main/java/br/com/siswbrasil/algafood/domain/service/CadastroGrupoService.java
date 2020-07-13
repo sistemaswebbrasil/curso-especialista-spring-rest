@@ -14,14 +14,14 @@ import br.com.siswbrasil.algafood.domain.model.Permissao;
 import br.com.siswbrasil.algafood.domain.repository.GrupoRepository;
 
 @Service
-public class GrupoService {
+public class CadastroGrupoService {
 	private static final String MSG_GRUPO_EM_USO = "Grupo de código %d não pode ser removido, pois está em uso";
 
 	@Autowired
 	GrupoRepository grupoRepository;
 	
 	@Autowired
-	PermissaoService permissaoService;	
+	CadastroPermissaoService permissaoService;	
 
 	public Grupo salvar(Grupo grupo) {
 		return grupoRepository.save(grupo);

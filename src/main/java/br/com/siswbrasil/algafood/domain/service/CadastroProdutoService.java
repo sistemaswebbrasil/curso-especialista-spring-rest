@@ -10,7 +10,7 @@ import br.com.siswbrasil.algafood.domain.model.Produto;
 import br.com.siswbrasil.algafood.domain.repository.ProdutoRepository;
 
 @Service
-public class ProdutoService {
+public class CadastroProdutoService {
 	
     @Autowired
     private ProdutoRepository produtoRepository;
