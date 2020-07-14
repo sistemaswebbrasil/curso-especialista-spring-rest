@@ -35,39 +35,35 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
-	
+
 	@Autowired
 	private CadastroCozinhaService cadastroCozinha;
-	
+
 	@Autowired
 	private CozinhaModelAssembler cozinhaModelAssembler;
-	
+
 	@Autowired
 	private CozinhaInputDisassembler cozinhaInputDisassembler;
-	
+
 	@Autowired
 	private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
-	
+
 	@Override
 	@GetMapping
 	public PagedModel<CozinhaModel> listar(@PageableDefault(size = 10) Pageable pageable) {
 		Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
-		
-		if (true) {
-			throw new RuntimeException("Teste de exception");
-		}
-		
-		PagedModel<CozinhaModel> cozinhasPagedModel = pagedResourcesAssembler
-				.toModel(cozinhasPage, cozinhaModelAssembler);
-		
+
+		PagedModel<CozinhaModel> cozinhasPagedModel = pagedResourcesAssembler.toModel(cozinhasPage,
+				cozinhaModelAssembler);
+
 		return cozinhasPagedModel;
 	}
-	
+
 	@Override
 	@GetMapping("/{cozinhaId}")
 	public CozinhaModel buscar(@PathVariable Long cozinhaId) {
 		Cozinha cozinha = cadastroCozinha.buscarOuFalhar(cozinhaId);
-		
+
 		return cozinhaModelAssembler.toModel(cozinha);
 	}
 
@@ -77,26 +73,25 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 	public CozinhaModel adicionar(@RequestBody @Valid CozinhaInput cozinhaInput) {
 		Cozinha cozinha = cozinhaInputDisassembler.toDomainObject(cozinhaInput);
 		cozinha = cadastroCozinha.salvar(cozinha);
-		
+
 		return cozinhaModelAssembler.toModel(cozinha);
 	}
-	
+
 	@Override
 	@PutMapping("/{cozinhaId}")
-	public CozinhaModel atualizar(@PathVariable Long cozinhaId,
-			@RequestBody @Valid CozinhaInput cozinhaInput) {
+	public CozinhaModel atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid CozinhaInput cozinhaInput) {
 		Cozinha cozinhaAtual = cadastroCozinha.buscarOuFalhar(cozinhaId);
 		cozinhaInputDisassembler.copyToDomainObject(cozinhaInput, cozinhaAtual);
 		cozinhaAtual = cadastroCozinha.salvar(cozinhaAtual);
-		
+
 		return cozinhaModelAssembler.toModel(cozinhaAtual);
 	}
-	
+
 	@Override
 	@DeleteMapping("/{cozinhaId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long cozinhaId) {
 		cadastroCozinha.excluir(cozinhaId);
 	}
-	
+
 }
