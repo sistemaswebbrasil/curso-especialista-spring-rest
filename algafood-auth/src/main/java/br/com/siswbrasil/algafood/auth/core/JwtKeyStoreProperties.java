@@ -1,4 +1,4 @@
-package br.com.siswbrasil.algafood.auth;
+package br.com.siswbrasil.algafood.auth.core;
 
 import javax.validation.constraints.NotBlank;
 
