@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.siswbrasil.algafood.api.v1.AlgaLinks;
 import br.com.siswbrasil.algafood.api.v1.openapi.controller.EstatisticasControllerOpenApi;
+import br.com.siswbrasil.algafood.core.security.CheckSecurity;
 import br.com.siswbrasil.algafood.domain.filter.VendaDiariaFilter;
 import br.com.siswbrasil.algafood.domain.model.dto.VendaDiaria;
 import br.com.siswbrasil.algafood.domain.service.VendaQueryService;
@@ -32,6 +33,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
 	@Autowired
 	private AlgaLinks algaLinks;
 	
+	@CheckSecurity.Estatisticas.PodeConsultar
 	@Override
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public EstatisticasModel estatisticas() {
@@ -42,6 +44,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
 		return estatisticasModel;
 	}
 	
+	@CheckSecurity.Estatisticas.PodeConsultar
 	@Override
 	@GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filtro,
@@ -49,6 +52,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
 		return vendaQueryService.consultarVendasDiarias(filtro, timeOffset);
 	}
 	
+	@CheckSecurity.Estatisticas.PodeConsultar
 	@Override
 	@GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<byte[]> consultarVendasDiariasPdf(VendaDiariaFilter filtro,
