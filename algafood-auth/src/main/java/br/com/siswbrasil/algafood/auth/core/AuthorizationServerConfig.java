@@ -37,12 +37,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory().withClient("algafood-web").secret(passwordEncoder.encode("web123"))
-				.authorizedGrantTypes("password", "refresh_token").scopes("write", "read")
+				.authorizedGrantTypes("password", "refresh_token").scopes("WRITE", "READ")
 				.accessTokenValiditySeconds(6 * 60 * 60)// 6 horas
 				.refreshTokenValiditySeconds(60 * 24 * 60 * 60) // 60 dias
 
 				.and().withClient("faturamento").secret(passwordEncoder.encode("faturamento123"))
-				.authorizedGrantTypes("client_credentials").scopes("write", "read")
+				.authorizedGrantTypes("client_credentials").scopes("WRITE", "READ")
 
 				.and().withClient("checktoken").secret(passwordEncoder.encode("check123"));
 	}
