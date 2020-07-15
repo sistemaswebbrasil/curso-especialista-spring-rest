@@ -1,5 +1,7 @@
 package br.com.siswbrasil.algafood.api.v1.controller;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import br.com.siswbrasil.algafood.api.v1.AlgaLinks;
 import br.com.siswbrasil.algafood.api.v1.assembler.PermissaoModelAssembler;
 import br.com.siswbrasil.algafood.api.v1.model.PermissaoModel;
 import br.com.siswbrasil.algafood.api.v1.openapi.controller.GrupoPermissaoControllerOpenApi;
+import br.com.siswbrasil.algafood.core.security.AlgaSecurity;
 import br.com.siswbrasil.algafood.core.security.CheckSecurity;
 import br.com.siswbrasil.algafood.domain.model.Grupo;
 import br.com.siswbrasil.algafood.domain.service.CadastroGrupoService;
@@ -35,6 +38,9 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 	@Autowired
 	private AlgaLinks algaLinks;
 	
+	@Autowired
+	private AlgaSecurity algaSecurity;
+	
 	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@Override
 	@GetMapping
@@ -43,14 +49,18 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 		
 		CollectionModel<PermissaoModel> permissoesModel 
 			= permissaoModelAssembler.toCollectionModel(grupo.getPermissoes())
-				.removeLinks()
-				.add(algaLinks.linkToGrupoPermissoes(grupoId))
-				.add(algaLinks.linkToGrupoPermissaoAssociacao(grupoId, "associar"));
+				.removeLinks();
 		
-		permissoesModel.getContent().forEach(permissaoModel -> {
-			permissaoModel.add(algaLinks.linkToGrupoPermissaoDesassociacao(
-					grupoId, permissaoModel.getId(), "desassociar"));
-		});
+		permissoesModel.add(algaLinks.linkToGrupoPermissoes(grupoId));
+		
+		if (algaSecurity.podeEditarUsuariosGruposPermissoes()) {
+			permissoesModel.add(algaLinks.linkToGrupoPermissaoAssociacao(grupoId, "associar"));
+		
+			permissoesModel.getContent().forEach(permissaoModel -> {
+				permissaoModel.add(algaLinks.linkToGrupoPermissaoDesassociacao(
+						grupoId, permissaoModel.getId(), "desassociar"));
+			});
+		}
 		
 		return permissoesModel;
 	}

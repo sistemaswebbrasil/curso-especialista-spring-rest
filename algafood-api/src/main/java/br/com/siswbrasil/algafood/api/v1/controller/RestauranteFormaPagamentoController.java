@@ -17,6 +17,7 @@ import br.com.siswbrasil.algafood.api.v1.AlgaLinks;
 import br.com.siswbrasil.algafood.api.v1.assembler.FormaPagamentoModelAssembler;
 import br.com.siswbrasil.algafood.api.v1.model.FormaPagamentoModel;
 import br.com.siswbrasil.algafood.api.v1.openapi.controller.RestauranteFormaPagamentoControllerOpenApi;
+import br.com.siswbrasil.algafood.core.security.AlgaSecurity;
 import br.com.siswbrasil.algafood.core.security.CheckSecurity;
 import br.com.siswbrasil.algafood.domain.model.Restaurante;
 import br.com.siswbrasil.algafood.domain.service.CadastroRestauranteService;
@@ -35,6 +36,9 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 	@Autowired
 	private AlgaLinks algaLinks;
 	
+	@Autowired
+	private AlgaSecurity algaSecurity;
+	
 	@CheckSecurity.Restaurantes.PodeConsultar
 	@Override
 	@GetMapping
@@ -43,14 +47,18 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 		
 		CollectionModel<FormaPagamentoModel> formasPagamentoModel 
 			= formaPagamentoModelAssembler.toCollectionModel(restaurante.getFormasPagamento())
-				.removeLinks()
-				.add(algaLinks.linkToRestauranteFormasPagamento(restauranteId))
-				.add(algaLinks.linkToRestauranteFormaPagamentoAssociacao(restauranteId, "associar"));
+				.removeLinks();
 		
-		formasPagamentoModel.getContent().forEach(formaPagamentoModel -> {
-			formaPagamentoModel.add(algaLinks.linkToRestauranteFormaPagamentoDesassociacao(
-					restauranteId, formaPagamentoModel.getId(), "desassociar"));
-		});
+		formasPagamentoModel.add(algaLinks.linkToRestauranteFormasPagamento(restauranteId));
+
+		if (algaSecurity.podeGerenciarFuncionamentoRestaurantes(restauranteId)) {
+			formasPagamentoModel.add(algaLinks.linkToRestauranteFormaPagamentoAssociacao(restauranteId, "associar"));
+			
+			formasPagamentoModel.getContent().forEach(formaPagamentoModel -> {
+				formaPagamentoModel.add(algaLinks.linkToRestauranteFormaPagamentoDesassociacao(
+						restauranteId, formaPagamentoModel.getId(), "desassociar"));
+			});
+		}
 		
 		return formasPagamentoModel;
 	}
