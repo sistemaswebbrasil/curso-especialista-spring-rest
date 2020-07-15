@@ -24,6 +24,7 @@ import br.com.siswbrasil.algafood.api.v1.model.input.SenhaInput;
 import br.com.siswbrasil.algafood.api.v1.model.input.UsuarioComSenhaInput;
 import br.com.siswbrasil.algafood.api.v1.model.input.UsuarioInput;
 import br.com.siswbrasil.algafood.api.v1.openapi.controller.UsuarioControllerOpenApi;
+import br.com.siswbrasil.algafood.core.security.CheckSecurity;
 import br.com.siswbrasil.algafood.domain.model.Usuario;
 import br.com.siswbrasil.algafood.domain.repository.UsuarioRepository;
 import br.com.siswbrasil.algafood.domain.service.CadastroUsuarioService;
@@ -44,6 +45,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 	@Autowired
 	private UsuarioInputDisassembler usuarioInputDisassembler;
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@Override
 	@GetMapping
 	public CollectionModel<UsuarioModel> listar() {
@@ -52,6 +54,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 		return usuarioModelAssembler.toCollectionModel(todasUsuarios);
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@Override
 	@GetMapping("/{usuarioId}")
 	public UsuarioModel buscar(@PathVariable Long usuarioId) {
@@ -70,6 +73,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 		return usuarioModelAssembler.toModel(usuario);
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeAlterarUsuario
 	@Override
 	@PutMapping("/{usuarioId}")
 	public UsuarioModel atualizar(@PathVariable Long usuarioId,
@@ -81,6 +85,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 		return usuarioModelAssembler.toModel(usuarioAtual);
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeAlterarPropriaSenha
 	@Override
 	@PutMapping("/{usuarioId}/senha")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

@@ -1,5 +1,6 @@
 package br.com.siswbrasil.algafood.api.v1.controller;
 
+
 import java.util.List;
 
 import javax.validation.Valid;
@@ -23,6 +24,7 @@ import br.com.siswbrasil.algafood.api.v1.assembler.GrupoModelAssembler;
 import br.com.siswbrasil.algafood.api.v1.model.GrupoModel;
 import br.com.siswbrasil.algafood.api.v1.model.input.GrupoInput;
 import br.com.siswbrasil.algafood.api.v1.openapi.controller.GrupoControllerOpenApi;
+import br.com.siswbrasil.algafood.core.security.CheckSecurity;
 import br.com.siswbrasil.algafood.domain.model.Grupo;
 import br.com.siswbrasil.algafood.domain.repository.GrupoRepository;
 import br.com.siswbrasil.algafood.domain.service.CadastroGrupoService;
@@ -43,6 +45,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 	@Autowired
 	private GrupoInputDisassembler grupoInputDisassembler;
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@Override
 	@GetMapping
 	public CollectionModel<GrupoModel> listar() {
@@ -51,6 +54,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 		return grupoModelAssembler.toCollectionModel(todosGrupos);
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@Override
 	@GetMapping("/{grupoId}")
 	public GrupoModel buscar(@PathVariable Long grupoId) {
@@ -59,6 +63,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 		return grupoModelAssembler.toModel(grupo);
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -70,6 +75,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 		return grupoModelAssembler.toModel(grupo);
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@Override
 	@PutMapping("/{grupoId}")
 	public GrupoModel atualizar(@PathVariable Long grupoId,
@@ -83,6 +89,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 		return grupoModelAssembler.toModel(grupoAtual);
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@Override
 	@DeleteMapping("/{grupoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

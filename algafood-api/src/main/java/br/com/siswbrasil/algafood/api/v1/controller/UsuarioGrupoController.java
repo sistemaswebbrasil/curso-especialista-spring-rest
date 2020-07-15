@@ -17,6 +17,7 @@ import br.com.siswbrasil.algafood.api.v1.AlgaLinks;
 import br.com.siswbrasil.algafood.api.v1.assembler.GrupoModelAssembler;
 import br.com.siswbrasil.algafood.api.v1.model.GrupoModel;
 import br.com.siswbrasil.algafood.api.v1.openapi.controller.UsuarioGrupoControllerOpenApi;
+import br.com.siswbrasil.algafood.core.security.CheckSecurity;
 import br.com.siswbrasil.algafood.domain.model.Usuario;
 import br.com.siswbrasil.algafood.domain.service.CadastroUsuarioService;
 
@@ -24,8 +25,7 @@ import br.com.siswbrasil.algafood.domain.service.CadastroUsuarioService;
 @RequestMapping(path = "/v1/usuarios/{usuarioId}/grupos", 
 	produces = MediaType.APPLICATION_JSON_VALUE)
 public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
-//1052 
-//106 21	
+
 	@Autowired
 	private CadastroUsuarioService cadastroUsuario;
 	
@@ -35,6 +35,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 	@Autowired
 	private AlgaLinks algaLinks;
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@Override
 	@GetMapping
 	public CollectionModel<GrupoModel> listar(@PathVariable Long usuarioId) {
@@ -52,6 +53,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 		return gruposModel;
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@Override
 	@DeleteMapping("/{grupoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
@@ -61,6 +63,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@Override
 	@PutMapping("/{grupoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
