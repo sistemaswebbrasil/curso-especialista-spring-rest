@@ -16,7 +16,7 @@ public class AlgaSecurity {
 	private RestauranteRepository restauranteRepository;
 	
 	@Autowired
-	private PedidoRepository pedidoRepository;	
+	private PedidoRepository pedidoRepository;
 	
 	public Authentication getAuthentication() {
 		return SecurityContextHolder.getContext().getAuthentication();
@@ -31,13 +31,18 @@ public class AlgaSecurity {
 	public boolean gerenciaRestaurante(Long restauranteId) {
 		if (restauranteId == null) {
 			return false;
-		}		
+		}
 		
 		return restauranteRepository.existsResponsavel(restauranteId, getUsuarioId());
 	}
 	
 	public boolean gerenciaRestauranteDoPedido(String codigoPedido) {
-	    return pedidoRepository.isPedidoGerenciadoPor(codigoPedido, getUsuarioId());
-	} 	
+		return pedidoRepository.isPedidoGerenciadoPor(codigoPedido, getUsuarioId());
+	}
+	
+	public boolean usuarioAutenticadoIgual(Long usuarioId) {
+		return getUsuarioId() != null && usuarioId != null
+				&& getUsuarioId().equals(usuarioId);
+	}
 	
 }
