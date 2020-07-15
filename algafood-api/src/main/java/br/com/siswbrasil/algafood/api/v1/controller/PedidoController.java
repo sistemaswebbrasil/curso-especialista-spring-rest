@@ -30,6 +30,7 @@ import br.com.siswbrasil.algafood.api.v1.openapi.controller.PedidoControllerOpen
 import br.com.siswbrasil.algafood.core.data.PageWrapper;
 import br.com.siswbrasil.algafood.core.data.PageableTranslator;
 import br.com.siswbrasil.algafood.core.security.AlgaSecurity;
+import br.com.siswbrasil.algafood.core.security.CheckSecurity;
 import br.com.siswbrasil.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.siswbrasil.algafood.domain.exception.NegocioException;
 import br.com.siswbrasil.algafood.domain.model.Pedido;
@@ -62,7 +63,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 	private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 	
 	@Autowired
-	private AlgaSecurity algaSecurity;	
+	private AlgaSecurity algaSecurity;
 	
 	@Override
 	@GetMapping
@@ -96,6 +97,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 		}
 	}
 	
+	@CheckSecurity.Pedidos.PodeBuscar
 	@Override
 	@GetMapping("/{codigoPedido}")
 	public PedidoModel buscar(@PathVariable String codigoPedido) {
