@@ -28,6 +28,7 @@ import br.com.siswbrasil.algafood.api.v1.model.RestauranteBasicoModel;
 import br.com.siswbrasil.algafood.api.v1.model.RestauranteModel;
 import br.com.siswbrasil.algafood.api.v1.model.input.RestauranteInput;
 import br.com.siswbrasil.algafood.api.v1.openapi.controller.RestauranteControllerOpenApi;
+import br.com.siswbrasil.algafood.core.security.CheckSecurity;
 import br.com.siswbrasil.algafood.domain.exception.CidadeNaoEncontradaException;
 import br.com.siswbrasil.algafood.domain.exception.CozinhaNaoEncontradaException;
 import br.com.siswbrasil.algafood.domain.exception.NegocioException;
@@ -58,6 +59,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 	@Autowired
 	private RestauranteInputDisassembler restauranteInputDisassembler;
 	
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@Override
 	@GetMapping
 	public CollectionModel<RestauranteBasicoModel> listar() {
@@ -65,6 +67,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 				.toCollectionModel(restauranteRepository.findAll());
 	}
 	
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@Override
 	@GetMapping(params = "projecao=apenas-nome")
 	public CollectionModel<RestauranteApenasNomeModel> listarApenasNomes() {
@@ -72,6 +75,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 				.toCollectionModel(restauranteRepository.findAll());
 	}
 	
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@Override
 	@GetMapping("/{restauranteId}")
 	public RestauranteModel buscar(@PathVariable Long restauranteId) {
@@ -80,6 +84,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 		return restauranteModelAssembler.toModel(restaurante);
 	}
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -93,6 +98,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 		}
 	}
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@PutMapping("/{restauranteId}")
 	public RestauranteModel atualizar(@PathVariable Long restauranteId,
@@ -108,6 +114,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 		}
 	}
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@PutMapping("/{restauranteId}/ativo")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
@@ -117,6 +124,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@DeleteMapping("/{restauranteId}/ativo")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
@@ -126,6 +134,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@PutMapping("/ativacoes")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
@@ -137,6 +146,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 		}
 	}
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@DeleteMapping("/ativacoes")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
@@ -148,6 +158,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 		}
 	}
 
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@PutMapping("/{restauranteId}/abertura")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
@@ -157,6 +168,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@PutMapping("/{restauranteId}/fechamento")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

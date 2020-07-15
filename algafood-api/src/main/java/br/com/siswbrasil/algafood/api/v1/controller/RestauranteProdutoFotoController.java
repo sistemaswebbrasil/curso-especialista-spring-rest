@@ -27,6 +27,7 @@ import br.com.siswbrasil.algafood.api.v1.assembler.FotoProdutoModelAssembler;
 import br.com.siswbrasil.algafood.api.v1.model.FotoProdutoModel;
 import br.com.siswbrasil.algafood.api.v1.model.input.FotoProdutoInput;
 import br.com.siswbrasil.algafood.api.v1.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
+import br.com.siswbrasil.algafood.core.security.CheckSecurity;
 import br.com.siswbrasil.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.siswbrasil.algafood.domain.model.FotoProduto;
 import br.com.siswbrasil.algafood.domain.model.Produto;
@@ -52,6 +53,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 	@Autowired
 	private FotoProdutoModelAssembler fotoProdutoModelAssembler;
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId,
@@ -73,6 +75,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 		return fotoProdutoModelAssembler.toModel(fotoSalva);
 	}
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@DeleteMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
@@ -81,6 +84,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 		catalogoFotoProduto.excluir(restauranteId, produtoId);
 	}
 	
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@Override
 	@GetMapping
 	public FotoProdutoModel buscar(@PathVariable Long restauranteId, 
@@ -90,6 +94,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 		return fotoProdutoModelAssembler.toModel(fotoProduto);
 	}
 	
+	// As fotos dos produtos ficarão públicas (não precisa de autorização para acessá-las)
 	@Override
 	@GetMapping(produces = MediaType.ALL_VALUE)
 	public ResponseEntity<?> servir(@PathVariable Long restauranteId, 
