@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.siswbrasil</groupId>
-	<artifactId>algafood-api</artifactId>
+	<artifactId>algafood</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>algafood-api</name>
-	<description>Projeto que contem somente os recursos</description>
+	<name>algafood</name>
+	<description>Projeto com os recursos e com a autenticação</description>
 
 	<properties>
 		<java.version>12</java.version>
