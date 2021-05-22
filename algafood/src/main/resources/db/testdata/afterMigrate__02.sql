@@ -1,8 +1,5 @@
 set foreign_key_checks = 0;
-
-delete from cidade;
 delete from cozinha;
-delete from estado;
 delete from forma_pagamento;
 delete from grupo;
 delete from grupo_permissao;
@@ -20,9 +17,7 @@ delete from oauth_client_details;
 
 set foreign_key_checks = 1;
 
-alter table cidade auto_increment = 1;
 alter table cozinha auto_increment = 1;
-alter table estado auto_increment = 1;
 alter table forma_pagamento auto_increment = 1;
 alter table grupo auto_increment = 1;
 alter table permissao auto_increment = 1;
@@ -37,17 +32,7 @@ insert into cozinha (id, nome) values (2, 'Indiana');
 insert into cozinha (id, nome) values (3, 'Argentina');
 insert into cozinha (id, nome) values (4, 'Brasileira');
 
-insert into estado (id, nome) values (1, 'Minas Gerais');
-insert into estado (id, nome) values (2, 'São Paulo');
-insert into estado (id, nome) values (3, 'Ceará');
-
-insert into cidade (id, nome, estado_id) values (1, 'Uberlândia', 1);
-insert into cidade (id, nome, estado_id) values (2, 'Belo Horizonte', 1);
-insert into cidade (id, nome, estado_id) values (3, 'São Paulo', 2);
-insert into cidade (id, nome, estado_id) values (4, 'Campinas', 2);
-insert into cidade (id, nome, estado_id) values (5, 'Fortaleza', 3);
-
-insert into restaurante (id, nome, taxa_frete, cozinha_id, data_cadastro, data_atualizacao, ativo, aberto, endereco_cidade_id, endereco_cep, endereco_logradouro, endereco_numero, endereco_bairro) values (1, 'Thai Gourmet', 10, 1, utc_timestamp, utc_timestamp, true, true, 1, '38400-999', 'Rua João Pinheiro', '1000', 'Centro');
+insert into restaurante (id, nome, taxa_frete, cozinha_id, data_cadastro, data_atualizacao, ativo, aberto, endereco_cidade_id, endereco_cep, endereco_logradouro, endereco_numero, endereco_bairro) values (1, 'Thai Gourmet', 10, 1, utc_timestamp, utc_timestamp, true, true, 2390, '38400-999', 'Rua João Pinheiro', '1000', 'Centro');
 insert into restaurante (id, nome, taxa_frete, cozinha_id, data_cadastro, data_atualizacao, ativo, aberto) values (2, 'Thai Delivery', 9.50, 1, utc_timestamp, utc_timestamp, true, true);
 insert into restaurante (id, nome, taxa_frete, cozinha_id, data_cadastro, data_atualizacao, ativo, aberto) values (3, 'Tuk Tuk Comida Indiana', 15, 2, utc_timestamp, utc_timestamp, true, true);
 insert into restaurante (id, nome, taxa_frete, cozinha_id, data_cadastro, data_atualizacao, ativo, aberto) values (4, 'Java Steakhouse', 12, 3, utc_timestamp, utc_timestamp, true, true);
@@ -85,6 +70,8 @@ insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('T-B
 insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Sanduíche X-Tudo', 'Sandubão com muito queijo, hamburger bovino, bacon, ovo, salada e maionese', 19, 1, 5);
 
 insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Espetinho de Cupim', 'Acompanha farinha, mandioca e vinagrete', 8, 1, 6);
+
+insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Biscoito Torcida', 'Sabor Churrasco', 5, 1, 6);
 
 
 insert into grupo (id, nome) values (1, 'Gerente'), (2, 'Vendedor'), (3, 'Secretária'), (4, 'Cadastrador');

@@ -65,7 +65,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 	@Autowired
 	private AlgaSecurity algaSecurity;
 	
-	@CheckSecurity.Pedidos.PodePesquisar
+	//@CheckSecurity.Pedidos.PodePesquisar
 	@Override
 	@GetMapping
 	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, 
@@ -79,6 +79,20 @@ public class PedidoController implements PedidoControllerOpenApi {
 		
 		return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoModelAssembler);
 	}
+	
+	
+	@GetMapping("/default")
+	public Page<Pedido> pesquisarDefault(PedidoFilter filtro, 
+			@PageableDefault(size = 10) Pageable pageable) {
+		Pageable pageableTraduzido = traduzirPageable(pageable);
+		
+		Page<Pedido> pedidosPage = pedidoRepository.findAll(
+				PedidoSpecs.usandoFiltro(filtro), pageableTraduzido);
+		
+		pedidosPage = new PageWrapper<>(pedidosPage, pageable);
+		
+		return pedidosPage;
+	}	
 	
 	@CheckSecurity.Pedidos.PodeCriar
 	@Override

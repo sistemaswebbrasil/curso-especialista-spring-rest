@@ -26,8 +26,7 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 		http
 			.formLogin().loginPage("/login")
 			.and()
-			.authorizeRequests()
-				.antMatchers("/oauth/**").authenticated()
+			.authorizeRequests().antMatchers("/oauth/**").authenticated()
 			.and()
 			.csrf().disable()
 			.cors().and()
