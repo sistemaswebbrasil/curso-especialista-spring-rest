@@ -46,16 +46,16 @@ public class Usuario {
 			inverseJoinColumns = @JoinColumn(name = "grupo_id"))
 	private Set<Grupo> grupos = new HashSet<>();
 	
-	public boolean isNovo() {
-	    return getId() == null;
+	public boolean removerGrupo(Grupo grupo) {
+		return getGrupos().remove(grupo);
 	}
 	
-	public boolean removerGrupo(Grupo grupo) {
-	    return getGrupos().remove(grupo);
-	}
-
 	public boolean adicionarGrupo(Grupo grupo) {
-	    return getGrupos().add(grupo);
-	}	
+		return getGrupos().add(grupo);
+	}
+	
+	public boolean isNovo() {
+		return getId() == null;
+	}
 	
 }

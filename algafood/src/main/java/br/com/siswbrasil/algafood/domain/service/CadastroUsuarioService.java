@@ -2,15 +2,11 @@ package br.com.siswbrasil.algafood.domain.service;
 
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import br.com.siswbrasil.algafood.domain.exception.EntidadeEmUsoException;
 import br.com.siswbrasil.algafood.domain.exception.NegocioException;
 import br.com.siswbrasil.algafood.domain.exception.UsuarioNaoEncontradoException;
 import br.com.siswbrasil.algafood.domain.model.Grupo;
@@ -19,17 +15,16 @@ import br.com.siswbrasil.algafood.domain.repository.UsuarioRepository;
 
 @Service
 public class CadastroUsuarioService {
-	private static final String MSG_USUARIO_EM_USO = "usuário de código %d não pode ser removido, pois está em uso";
 
 	@Autowired
-	UsuarioRepository usuarioRepository;
+	private UsuarioRepository usuarioRepository;
 	
 	@Autowired
-	CadastroGrupoService grupoService;	
+	private CadastroGrupoService cadastroGrupo;
 	
 	@Autowired
-	private PasswordEncoder passwordEncoder;  	
-
+	private PasswordEncoder passwordEncoder;
+	
 	@Transactional
 	public Usuario salvar(Usuario usuario) {
 		usuarioRepository.detach(usuario);
@@ -60,37 +55,24 @@ public class CadastroUsuarioService {
 	}
 
 	@Transactional
-	public void excluir(Long id) {
-		try {
-			usuarioRepository.deleteById(id);
-			usuarioRepository.flush();
-
-		} catch (EmptyResultDataAccessException e) {
-			throw new UsuarioNaoEncontradoException(id);
-
-		} catch (DataIntegrityViolationException e) {
-			throw new EntidadeEmUsoException(String.format(MSG_USUARIO_EM_USO, id));
-		}
-	}
-
-	public Usuario buscarOuFalhar(Long id) {
-		return usuarioRepository.findById(id).orElseThrow(() -> new UsuarioNaoEncontradoException(id));
+	public void desassociarGrupo(Long usuarioId, Long grupoId) {
+		Usuario usuario = buscarOuFalhar(usuarioId);
+		Grupo grupo = cadastroGrupo.buscarOuFalhar(grupoId);
+		
+		usuario.removerGrupo(grupo);
 	}
 	
 	@Transactional
-	public void desassociarGrupo(Long usuarioId, Long grupoId) {
-	    Usuario usuario = buscarOuFalhar(usuarioId);
-	    Grupo grupo = grupoService.buscarOuFalhar(grupoId);
-	    
-	    usuario.removerGrupo(grupo);
-	}
-
-	@Transactional
 	public void associarGrupo(Long usuarioId, Long grupoId) {
-	    Usuario usuario = buscarOuFalhar(usuarioId);
-	    Grupo grupo = grupoService.buscarOuFalhar(grupoId);
-	    
-	    usuario.adicionarGrupo(grupo);
-	}	
-
+		Usuario usuario = buscarOuFalhar(usuarioId);
+		Grupo grupo = cadastroGrupo.buscarOuFalhar(grupoId);
+		
+		usuario.adicionarGrupo(grupo);
+	}
+	
+	public Usuario buscarOuFalhar(Long usuarioId) {
+		return usuarioRepository.findById(usuarioId)
+			.orElseThrow(() -> new UsuarioNaoEncontradoException(usuarioId));
+	}
+	
 }

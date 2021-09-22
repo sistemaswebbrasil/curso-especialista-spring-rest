@@ -50,7 +50,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		return ResponseEntity.status(status).headers(headers).build();
-	}	
+	}
 	
 	@Override
 	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
@@ -102,7 +102,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
 		String detail = MSG_ERRO_GENERICA_USUARIO_FINAL;
 
-		
 		log.error(ex.getMessage(), ex);
 		
 		Problem problem = createProblemBuilder(status, problemType, detail)
@@ -210,6 +209,21 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
 
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<?> handleEntidadeNaoEncontrada(AccessDeniedException ex, WebRequest request) {
+
+		HttpStatus status = HttpStatus.FORBIDDEN;
+		ProblemType problemType = ProblemType.ACESSO_NEGADO;
+		String detail = ex.getMessage();
+
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.userMessage("Você não possui permissão para executar essa operação.")
+				.build();
+
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+	}
+	
 	@ExceptionHandler(EntidadeNaoEncontradaException.class)
 	public ResponseEntity<?> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException ex,
 			WebRequest request) {
@@ -252,21 +266,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
-	
-	@ExceptionHandler(AccessDeniedException.class)
-	public ResponseEntity<?> handleEntidadeNaoEncontrada(AccessDeniedException ex, WebRequest request) {
-
-	    HttpStatus status = HttpStatus.FORBIDDEN;
-	    ProblemType problemType = ProblemType.ACESSO_NEGADO;
-	    String detail = ex.getMessage();
-
-	    Problem problem = createProblemBuilder(status, problemType, detail)
-	            .userMessage(detail)
-	            .userMessage("Você não possui permissão para executar essa operação.")
-	            .build();
-
-	    return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
-	}	
 	
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,

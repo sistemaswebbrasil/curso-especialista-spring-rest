@@ -7,7 +7,7 @@ import br.com.siswbrasil.algafood.api.exceptionhandler.Problem;
 import br.com.siswbrasil.algafood.api.v1.model.PedidoModel;
 import br.com.siswbrasil.algafood.api.v1.model.PedidoResumoModel;
 import br.com.siswbrasil.algafood.api.v1.model.input.PedidoInput;
-import br.com.siswbrasil.algafood.infrastructure.repository.filter.PedidoFilter;
+import br.com.siswbrasil.algafood.domain.filter.PedidoFilter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

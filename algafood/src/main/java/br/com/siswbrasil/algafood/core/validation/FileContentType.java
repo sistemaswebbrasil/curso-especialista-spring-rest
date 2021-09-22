@@ -19,12 +19,12 @@ import javax.validation.Payload;
 @Constraint(validatedBy = { FileContentTypeValidator.class })
 public @interface FileContentType {
 
-    String message() default "arquivo inválido";
+	String message() default "arquivo inválido";
 
-    Class<?>[] groups() default { };
+	Class<?>[] groups() default { };
 
-    Class<? extends Payload>[] payload() default { };
-    
-    String[] allowed();
-    
+	Class<? extends Payload>[] payload() default { };
+	
+	String[] allowed();
+	
 }

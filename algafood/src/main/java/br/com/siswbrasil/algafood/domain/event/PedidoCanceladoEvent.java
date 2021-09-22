@@ -8,6 +8,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class PedidoCanceladoEvent {
 
-    private Pedido pedido;
-    
+	private Pedido pedido;
+	
 }

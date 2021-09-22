@@ -1,6 +1,5 @@
 package br.com.siswbrasil.algafood.core.validation;
 
-
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.ElementType;

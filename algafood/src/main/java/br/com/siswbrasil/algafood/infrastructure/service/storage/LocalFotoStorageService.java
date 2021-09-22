@@ -1,4 +1,4 @@
-package br.com.siswbrasil.algafood.infrastructure.storage;
+package br.com.siswbrasil.algafood.infrastructure.service.storage;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,7 +9,6 @@ import org.springframework.util.FileCopyUtils;
 import br.com.siswbrasil.algafood.core.storage.StorageProperties;
 import br.com.siswbrasil.algafood.domain.service.FotoStorageService;
 
-  
 public class LocalFotoStorageService implements FotoStorageService {
 
 	@Autowired
@@ -28,7 +27,7 @@ public class LocalFotoStorageService implements FotoStorageService {
 		} catch (Exception e) {
 			throw new StorageException("Não foi possível recuperar arquivo.", e);
 		}
-	}  
+	}
 	
 	@Override
 	public void armazenar(NovaFoto novaFoto) {
@@ -57,7 +56,5 @@ public class LocalFotoStorageService implements FotoStorageService {
 		return storageProperties.getLocal().getDiretorioFotos()
 				.resolve(Path.of(nomeArquivo));
 	}
-	
+
 }
-
-

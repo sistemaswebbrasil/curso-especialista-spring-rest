@@ -12,8 +12,8 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 import br.com.siswbrasil.algafood.core.storage.StorageProperties.TipoStorage;
 import br.com.siswbrasil.algafood.domain.service.FotoStorageService;
-import br.com.siswbrasil.algafood.infrastructure.storage.LocalFotoStorageService;
-import br.com.siswbrasil.algafood.infrastructure.storage.S3FotoStorageService;
+import br.com.siswbrasil.algafood.infrastructure.service.storage.LocalFotoStorageService;
+import br.com.siswbrasil.algafood.infrastructure.service.storage.S3FotoStorageService;
 
 @Configuration
 public class StorageConfig {

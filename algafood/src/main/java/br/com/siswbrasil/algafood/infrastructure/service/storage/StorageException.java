@@ -1,4 +1,4 @@
-package br.com.siswbrasil.algafood.infrastructure.storage;
+package br.com.siswbrasil.algafood.infrastructure.service.storage;
 
 public class StorageException extends RuntimeException {
 

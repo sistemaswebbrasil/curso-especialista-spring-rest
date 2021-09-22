@@ -10,11 +10,11 @@ import br.com.siswbrasil.algafood.domain.model.FormaPagamento;
 
 @Repository
 public interface FormaPagamentoRepository extends JpaRepository<FormaPagamento, Long> {
-	
+
 	@Query("select max(dataAtualizacao) from FormaPagamento")
-	OffsetDateTime getDataUltimaAtualizacao();	
+	OffsetDateTime getDataUltimaAtualizacao();
 	
 	@Query("select dataAtualizacao from FormaPagamento where id = :formaPagamentoId")
-	OffsetDateTime getDataAtualizacaoById(Long formaPagamentoId);  	
-
+	OffsetDateTime getDataAtualizacaoById(Long formaPagamentoId);
+	
 }

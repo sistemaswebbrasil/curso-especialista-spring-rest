@@ -33,11 +33,11 @@ import br.com.siswbrasil.algafood.core.security.AlgaSecurity;
 import br.com.siswbrasil.algafood.core.security.CheckSecurity;
 import br.com.siswbrasil.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.siswbrasil.algafood.domain.exception.NegocioException;
+import br.com.siswbrasil.algafood.domain.filter.PedidoFilter;
 import br.com.siswbrasil.algafood.domain.model.Pedido;
 import br.com.siswbrasil.algafood.domain.model.Usuario;
 import br.com.siswbrasil.algafood.domain.repository.PedidoRepository;
 import br.com.siswbrasil.algafood.domain.service.EmissaoPedidoService;
-import br.com.siswbrasil.algafood.infrastructure.repository.filter.PedidoFilter;
 import br.com.siswbrasil.algafood.infrastructure.repository.spec.PedidoSpecs;
 
 @RestController
@@ -65,7 +65,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 	@Autowired
 	private AlgaSecurity algaSecurity;
 	
-	//@CheckSecurity.Pedidos.PodePesquisar
+	@CheckSecurity.Pedidos.PodePesquisar
 	@Override
 	@GetMapping
 	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, 
@@ -79,20 +79,6 @@ public class PedidoController implements PedidoControllerOpenApi {
 		
 		return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoModelAssembler);
 	}
-	
-	
-	@GetMapping("/default")
-	public Page<Pedido> pesquisarDefault(PedidoFilter filtro, 
-			@PageableDefault(size = 10) Pageable pageable) {
-		Pageable pageableTraduzido = traduzirPageable(pageable);
-		
-		Page<Pedido> pedidosPage = pedidoRepository.findAll(
-				PedidoSpecs.usandoFiltro(filtro), pageableTraduzido);
-		
-		pedidosPage = new PageWrapper<>(pedidosPage, pageable);
-		
-		return pedidosPage;
-	}	
 	
 	@CheckSecurity.Pedidos.PodeCriar
 	@Override

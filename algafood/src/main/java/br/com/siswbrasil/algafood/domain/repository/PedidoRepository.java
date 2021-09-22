@@ -10,7 +10,8 @@ import org.springframework.stereotype.Repository;
 import br.com.siswbrasil.algafood.domain.model.Pedido;
 
 @Repository
-public interface PedidoRepository extends CustomJpaRepository<Pedido, Long> ,JpaSpecificationExecutor<Pedido> {
+public interface PedidoRepository extends CustomJpaRepository<Pedido, Long>,
+		JpaSpecificationExecutor<Pedido> {
 
 	Optional<Pedido> findByCodigo(String codigo);
 
@@ -18,5 +19,5 @@ public interface PedidoRepository extends CustomJpaRepository<Pedido, Long> ,Jpa
 	List<Pedido> findAll();
 	
 	boolean isPedidoGerenciadoPor(String codigoPedido, Long usuarioId);
-
+	
 }

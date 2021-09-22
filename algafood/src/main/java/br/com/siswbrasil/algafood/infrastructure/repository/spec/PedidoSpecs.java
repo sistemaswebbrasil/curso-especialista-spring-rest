@@ -6,20 +6,14 @@ import javax.persistence.criteria.Predicate;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import br.com.siswbrasil.algafood.domain.filter.PedidoFilter;
 import br.com.siswbrasil.algafood.domain.model.Pedido;
-import br.com.siswbrasil.algafood.infrastructure.repository.filter.PedidoFilter;
-
-
-
 
 public class PedidoSpecs {
 
 	public static Specification<Pedido> usandoFiltro(PedidoFilter filtro) {
 		return (root, query, builder) -> {
-			
-			
 			if (Pedido.class.equals(query.getResultType())) {
-			
 				root.fetch("restaurante").fetch("cozinha");
 				root.fetch("cliente");
 			}

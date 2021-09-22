@@ -1,9 +1,8 @@
 package br.com.siswbrasil.algafood.domain.service;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.siswbrasil.algafood.domain.exception.NegocioException;
 import br.com.siswbrasil.algafood.domain.exception.PedidoNaoEncontradoException;
@@ -36,10 +35,6 @@ public class EmissaoPedidoService {
 	@Autowired
 	private CadastroFormaPagamentoService cadastroFormaPagamento;
 
-	public Pedido buscarOuFalhar(String codigoPedido) {
-		return pedidoRepository.findByCodigo(codigoPedido).orElseThrow(() -> new PedidoNaoEncontradoException(codigoPedido));
-	}
-
 	@Transactional
 	public Pedido emitir(Pedido pedido) {
 		validarPedido(pedido);
@@ -61,7 +56,7 @@ public class EmissaoPedidoService {
 		pedido.setCliente(cliente);
 		pedido.setRestaurante(restaurante);
 		pedido.setFormaPagamento(formaPagamento);
-
+		
 		if (restaurante.naoAceitaFormaPagamento(formaPagamento)) {
 			throw new NegocioException(String.format("Forma de pagamento '%s' não é aceita por esse restaurante.",
 					formaPagamento.getDescricao()));
@@ -70,12 +65,18 @@ public class EmissaoPedidoService {
 
 	private void validarItens(Pedido pedido) {
 		pedido.getItens().forEach(item -> {
-			Produto produto = cadastroProduto.buscarOuFalhar(pedido.getRestaurante().getId(),
-					item.getProduto().getId());
-
+			Produto produto = cadastroProduto.buscarOuFalhar(
+					pedido.getRestaurante().getId(), item.getProduto().getId());
+			
 			item.setPedido(pedido);
 			item.setProduto(produto);
 			item.setPrecoUnitario(produto.getPreco());
 		});
 	}
+	
+	public Pedido buscarOuFalhar(String codigoPedido) {
+		return pedidoRepository.findByCodigo(codigoPedido)
+			.orElseThrow(() -> new PedidoNaoEncontradoException(codigoPedido));
+	}
+
 }

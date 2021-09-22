@@ -47,7 +47,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 	@Autowired
 	private CidadeInputDisassembler cidadeInputDisassembler;
 	
-//	@CheckSecurity.Cidades.PodeConsultar
+	@CheckSecurity.Cidades.PodeConsultar
 	@Override
 	@GetMapping
 	public CollectionModel<CidadeModel> listar() {
